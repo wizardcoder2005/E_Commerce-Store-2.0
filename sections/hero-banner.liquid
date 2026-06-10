@@ -18,14 +18,37 @@
   <div class="absolute inset-0 bg-gradient-to-t from-zonura-navy to-transparent" style="opacity: {{ overlay_opacity }};"></div>
   
   <!-- Content -->
-  <div class="relative h-full flex flex-col justify-end px-6 md:px-16 pb-12 md:pb-20 max-w-[1600px] mx-auto {{ section.settings.text_alignment }}">
-    <h1 class="font-serif text-4xl md:text-6xl lg:text-7xl text-zonura-sand mb-4 leading-tight max-w-3xl">{{ section.settings.heading }}</h1>
-    <p class="font-sans text-base md:text-xl text-zonura-sand/80 max-w-xl mb-8 font-light leading-relaxed">{{ section.settings.subheading }}</p>
-    {% if section.settings.button_text != blank %}
-      <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="w-fit bg-zonura-sand text-zonura-navy px-8 py-4 rounded-premium font-sans font-bold text-sm tracking-wide hover:bg-white transition-colors text-center">
-        {{ section.settings.button_text }}
+  <div class="relative h-full flex flex-col md:flex-row items-start md:items-end justify-between px-6 md:px-16 pb-12 md:pb-20 pt-32 max-w-[1600px] mx-auto gap-8 md:gap-12">
+    
+    <!-- Text Content -->
+    <div class="flex flex-col w-full md:w-auto {{ section.settings.text_alignment }} max-w-3xl justify-end h-full">
+      <h1 class="font-serif text-4xl md:text-6xl lg:text-7xl text-zonura-sand mb-4 leading-tight">{{ section.settings.heading }}</h1>
+      <p class="font-sans text-base md:text-xl text-zonura-sand/80 max-w-xl mb-8 font-light leading-relaxed">{{ section.settings.subheading }}</p>
+      {% if section.settings.button_text != blank %}
+        <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="w-fit bg-zonura-sand text-zonura-navy px-8 py-4 rounded-premium font-sans font-bold text-sm tracking-wide hover:bg-white transition-colors text-center inline-block">
+          {{ section.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- Featured Product Card -->
+    {% if section.settings.featured_product != blank %}
+      {% assign fp = section.settings.featured_product %}
+      <a href="{{ fp.url }}" class="hidden md:flex flex-col group w-full max-w-[280px] lg:max-w-[320px] bg-white/10 backdrop-blur-md border border-white/20 rounded-premium p-4 shadow-2xl hover:bg-white/20 transition-all shrink-0">
+        <div class="relative aspect-[4/5] rounded-[10px] overflow-hidden mb-4">
+          <img src="{{ fp.featured_image | image_url: width: 600 }}" alt="{{ fp.title | escape }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+          <div class="absolute top-3 left-3 bg-zonura-gold text-zonura-navy text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Featured</div>
+        </div>
+        <h3 class="font-sans font-bold text-zonura-sand text-sm lg:text-base mb-1 truncate">{{ fp.title }}</h3>
+        <div class="flex items-center justify-between">
+          <p class="font-serif text-zonura-sand/90 text-sm lg:text-base">{{ fp.price | money }}</p>
+          <span class="w-8 h-8 rounded-full bg-zonura-sand text-zonura-navy flex items-center justify-center group-hover:bg-zonura-gold transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+          </span>
+        </div>
       </a>
     {% endif %}
+
   </div>
 </div>
 
@@ -95,6 +118,16 @@
       "type": "url",
       "id": "button_link",
       "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Shoppable Featured Product"
+    },
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Featured Product",
+      "info": "Select a product to display as a floating glassmorphic card on desktop."
     }
   ],
   "presets": [
