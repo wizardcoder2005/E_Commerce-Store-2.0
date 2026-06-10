@@ -1,0 +1,86 @@
+<div class="max-w-[1600px] mx-auto px-4 md:px-8 py-8 md:py-12">
+  <h1 class="font-serif text-4xl text-zonura-navy mb-8">{{ collection.title }}</h1>
+  
+  <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+    
+    <!-- Left Column: Filters -->
+    <aside class="w-full lg:w-64 shrink-0 lg:sticky lg:top-32">
+      <h2 class="font-sans font-bold text-sm tracking-widest uppercase text-zonura-navy mb-6">Filter By</h2>
+      <form id="collection-filters-form" class="flex flex-col gap-8">
+        {% for filter in collection.filters %}
+          <div class="border-b border-zonura-navy/10 pb-6">
+            <h3 class="font-sans font-bold text-sm text-zonura-navy mb-4">{{ filter.label }}</h3>
+            <ul class="flex flex-col gap-3">
+              {% for value in filter.values %}
+                <li class="flex items-center gap-3 group cursor-pointer">
+                  <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                    {% if value.active %}checked{% endif %}
+                    {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                    class="w-4 h-4 border-zonura-navy/20 rounded-sm text-zonura-gold focus:ring-zonura-navy transition-colors cursor-pointer"
+                  >
+                  <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}" class="font-sans text-sm text-zonura-navy/80 group-hover:text-zonura-navy cursor-pointer {% if value.count == 0 and value.active == false %}opacity-50{% endif %}">
+                    {{ value.label | escape }} ({{ value.count }})
+                  </label>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+        <div class="flex items-center justify-between">
+          <button type="submit" class="bg-zonura-navy text-white px-6 py-2.5 rounded-[14px] text-xs font-bold uppercase tracking-wider hover:bg-zonura-navy/90 transition-colors">Apply</button>
+          <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="text-xs font-sans text-zonura-navy/60 hover:text-zonura-navy underline">Clear</a>
+        </div>
+      </form>
+    </aside>
+
+    <!-- Right Column: Product Grid -->
+    <div class="flex-1 w-full">
+      <div class="flex justify-between items-center mb-6">
+        <span class="font-sans text-sm text-zonura-navy/60">{{ collection.products_count }} products</span>
+        <div class="flex items-center gap-2">
+          <label class="font-sans text-sm text-zonura-navy/60">Sort by:</label>
+          <select class="font-sans text-sm text-zonura-navy bg-transparent border-b border-zonura-navy/20 py-1 focus:outline-none focus:border-zonura-gold cursor-pointer" onchange="location = this.value;">
+            {% for option in collection.sort_options %}
+              <option value="?sort_by={{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>{{ option.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+        {% paginate collection.products by 16 %}
+          {% for product in collection.products %}
+            <a href="{{ product.url }}" class="group flex flex-col">
+              <div class="relative aspect-[4/5] bg-zonura-sand/50 rounded-[14px] overflow-hidden mb-4 border border-zonura-navy/5">
+                <img src="{{ product.featured_image | img_url: '600x' }}" alt="{{ product.title | escape }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div class="absolute inset-0 bg-zonura-navy/0 group-hover:bg-zonura-navy/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                  <span class="bg-white/90 text-zonura-navy px-6 py-3 rounded-premium font-sans text-sm font-bold tracking-wide backdrop-blur-sm shadow-xl">QUICK VIEW</span>
+                </div>
+              </div>
+              <h3 class="font-sans font-bold text-zonura-navy text-sm md:text-base mb-1 truncate">{{ product.title }}</h3>
+              <p class="font-serif text-zonura-navy/80 text-sm">{{ product.price | money }}</p>
+            </a>
+          {% else %}
+            <p class="text-zonura-navy col-span-full py-12 text-center bg-zonura-sand/20 rounded-[14px]">No products match your filters.</p>
+          {% endfor %}
+
+          <!-- Pagination -->
+          {% if paginate.pages > 1 %}
+            <div class="col-span-full flex justify-center mt-12">
+              <div class="flex items-center gap-4 font-sans text-sm text-zonura-navy">
+                {{ paginate | default_pagination }}
+              </div>
+            </div>
+          {% endif %}
+        {% endpaginate %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection Grid",
+  "presets": [{"name": "Collection Grid"}]
+}
+{% endschema %}

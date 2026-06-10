@@ -1,0 +1,63 @@
+<div class="max-w-[1600px] mx-auto px-4 md:px-8 py-12 md:py-16">
+  
+  <div class="max-w-2xl mx-auto text-center mb-12">
+    <h1 class="font-serif text-4xl text-zonura-navy mb-6">Search Results</h1>
+    <form action="{{ routes.search_url }}" method="get" class="relative w-full flex shadow-sm">
+      <input type="text" name="q" value="{{ search.terms | escape }}" placeholder="Search for wellness, serums, oils..." class="w-full bg-zonura-sand/20 border border-zonura-navy/10 rounded-l-[14px] py-4 px-6 text-sm font-sans text-zonura-navy focus:outline-none focus:ring-2 focus:ring-zonura-gold/50 focus:border-zonura-gold/50 transition-all placeholder:text-zonura-navy/40" />
+      <button type="submit" class="bg-zonura-gold hover:bg-zonura-gold/90 transition-colors px-8 rounded-r-[14px] text-zonura-navy flex items-center justify-center font-bold tracking-wider text-sm">
+        SEARCH
+      </button>
+    </form>
+  </div>
+
+  {% if search.performed %}
+    <div class="flex justify-between items-center mb-8 border-b border-zonura-navy/10 pb-4">
+      <span class="font-sans text-sm text-zonura-navy/80">
+        Showing {{ search.results_count }} results for "<span class="font-bold">{{ search.terms | escape }}</span>"
+      </span>
+    </div>
+
+    {% if search.results_count == 0 %}
+      <div class="text-center py-20 bg-zonura-sand/20 rounded-[14px] border border-zonura-navy/5">
+        <p class="font-serif text-2xl text-zonura-navy mb-4">No results found</p>
+        <p class="font-sans text-sm text-zonura-navy/60">Try adjusting your search or explore our collections.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="inline-block mt-6 bg-zonura-navy text-white px-8 py-3 rounded-[14px] font-bold text-xs uppercase tracking-widest hover:bg-zonura-navy/90 transition-colors">View All Products</a>
+      </div>
+    {% else %}
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+        {% paginate search.results by 16 %}
+          {% for item in search.results %}
+            {% if item.object_type == 'product' %}
+              <a href="{{ item.url }}" class="group flex flex-col">
+                <div class="relative aspect-[4/5] bg-zonura-sand/50 rounded-[14px] overflow-hidden mb-4 border border-zonura-navy/5">
+                  <img src="{{ item.featured_image | img_url: '600x' }}" alt="{{ item.title | escape }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div class="absolute inset-0 bg-zonura-navy/0 group-hover:bg-zonura-navy/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <span class="bg-white/90 text-zonura-navy px-6 py-3 rounded-premium font-sans text-sm font-bold tracking-wide backdrop-blur-sm shadow-xl">VIEW PRODUCT</span>
+                  </div>
+                </div>
+                <h3 class="font-sans font-bold text-zonura-navy text-sm md:text-base mb-1 truncate">{{ item.title }}</h3>
+                <p class="font-serif text-zonura-navy/80 text-sm">{{ item.price | money }}</p>
+              </a>
+            {% endif %}
+          {% endfor %}
+
+          <!-- Pagination -->
+          {% if paginate.pages > 1 %}
+            <div class="col-span-full flex justify-center mt-12">
+              <div class="flex items-center gap-4 font-sans text-sm text-zonura-navy">
+                {{ paginate | default_pagination }}
+              </div>
+            </div>
+          {% endif %}
+        {% endpaginate %}
+      </div>
+    {% endif %}
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Search Results",
+  "presets": [{"name": "Search Results"}]
+}
+{% endschema %}

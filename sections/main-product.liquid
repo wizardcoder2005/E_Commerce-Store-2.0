@@ -1,77 +1,112 @@
-<div class="w-full max-w-[1600px] mx-auto px-4 md:px-8 py-8 md:py-12">
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+<div class="w-full max-w-[1600px] mx-auto px-4 md:px-8 py-6 md:py-10">
+  <!-- Breadcrumbs -->
+  <nav class="flex items-center gap-2 font-sans text-xs text-zonura-navy/60 mb-6">
+    <a href="{{ routes.root_url }}" class="hover:text-zonura-gold transition-colors">Home</a>
+    <span>/</span>
+    <a href="{{ routes.all_products_collection_url }}" class="hover:text-zonura-gold transition-colors">Products</a>
+    <span>/</span>
+    <span class="text-zonura-navy font-bold truncate max-w-[200px]">{{ product.title }}</span>
+  </nav>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12 relative">
     
-    <!-- Left Column: Myntra-Style 2x2 Image Grid -->
-    <div class="lg:col-span-7">
-      <div class="grid grid-cols-2 gap-2 md:gap-4">
-        {% for image in product.images %}
-          <div class="relative aspect-[3/4] bg-zonura-sand/20 {% if forloop.first %}col-span-2 aspect-[4/5]{% endif %}">
-            <img src="{{ image.src | img_url: '1000x' }}" alt="{{ image.alt | escape }}" class="w-full h-full object-cover" />
+    <!-- Column 1: Asset Gallery (col-span-4) -->
+    <div class="lg:col-span-4 flex flex-col gap-4">
+      <div class="relative w-full aspect-[4/5] bg-zonura-sand/20 rounded-[14px] overflow-hidden border border-zonura-navy/5">
+        <img src="{{ product.featured_image | img_url: '1000x' }}" alt="{{ product.title | escape }}" class="w-full h-full object-cover" />
+      </div>
+      <!-- Thumbnails -->
+      <div class="grid grid-cols-4 gap-4">
+        {% for image in product.images offset: 1 limit: 4 %}
+          <div class="relative aspect-square bg-zonura-sand/20 rounded-[14px] overflow-hidden border border-zonura-navy/5 cursor-pointer hover:border-zonura-gold transition-colors">
+            <img src="{{ image.src | img_url: '400x' }}" alt="{{ image.alt | escape }}" class="w-full h-full object-cover" />
           </div>
         {% endfor %}
       </div>
     </div>
 
-    <!-- Right Column: Sticky Product Info -->
-    <div class="lg:col-span-5 relative">
-      <div class="sticky top-28 flex flex-col">
-        
-        <h1 class="font-serif text-3xl lg:text-4xl text-zonura-navy leading-tight mb-2">
-          {{ product.title }}
-        </h1>
-        
-        <p class="font-sans text-sm tracking-[0.2em] text-zonura-gold uppercase font-bold mb-4">
-          ZONURA Exclusive
-        </p>
+    <!-- Column 2: Information Feed (col-span-5) -->
+    <div class="lg:col-span-5 flex flex-col">
+      <h1 class="font-serif text-3xl lg:text-4xl text-zonura-navy leading-tight mb-2">
+        {{ product.title }}
+      </h1>
+      
+      <!-- Stars (Mock Rating) -->
+      <div class="flex items-center gap-1 mb-4 text-zonura-gold">
+        {% for i in (1..5) %}
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+        {% endfor %}
+        <span class="font-sans text-xs text-zonura-navy/60 ml-2">128 Ratings</span>
+      </div>
 
-        <div class="h-[1px] w-full bg-zonura-navy/10 mb-6"></div>
+      <div class="h-[1px] w-full bg-zonura-navy/10 mb-6"></div>
 
-        <div class="flex items-end gap-3 mb-2">
-          <span class="font-serif text-3xl font-bold text-zonura-navy">
+      <div class="font-sans text-sm text-zonura-navy/80 leading-relaxed font-light mb-8 prose max-w-none">
+        {{ product.description }}
+      </div>
+
+      <!-- Tab System -->
+      <div class="mt-4 border-t border-zonura-navy/10">
+        <div class="w-full py-5 flex items-center justify-between group cursor-pointer border-b border-zonura-navy/5">
+          <span class="font-sans tracking-widest text-sm uppercase text-zonura-navy font-bold">The Ritual</span>
+          <svg class="w-5 h-5 text-zonura-navy/40 group-hover:text-zonura-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+        </div>
+        <div class="w-full py-5 flex items-center justify-between group cursor-pointer border-b border-zonura-navy/5">
+          <span class="font-sans tracking-widest text-sm uppercase text-zonura-navy font-bold">The Sourcing</span>
+          <svg class="w-5 h-5 text-zonura-navy/40 group-hover:text-zonura-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+        </div>
+        <div class="w-full py-5 flex items-center justify-between group cursor-pointer border-b border-zonura-navy/5">
+          <span class="font-sans tracking-widest text-sm uppercase text-zonura-navy font-bold">The Science</span>
+          <svg class="w-5 h-5 text-zonura-navy/40 group-hover:text-zonura-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 3: The Buy Box Card (col-span-3) -->
+    <div class="lg:col-span-3">
+      <div class="sticky top-40 border border-zonura-navy/10 rounded-[14px] p-6 shadow-xl shadow-zonura-navy/5 bg-white flex flex-col gap-5">
+        
+        <div class="flex flex-col">
+          <span class="font-serif text-3xl font-bold text-zonura-navy mb-1">
             {{ product.price | money }}
           </span>
           {% if product.compare_at_price > product.price %}
-            <span class="font-sans text-sm text-zonura-navy/50 line-through mb-1">
+            <span class="font-sans text-sm text-zonura-navy/50 line-through">
               {{ product.compare_at_price | money }}
             </span>
           {% endif %}
+          <p class="font-sans text-xs text-green-700 font-bold mt-1">inclusive of all taxes</p>
         </div>
-        <p class="font-sans text-xs text-green-700 font-bold mb-6">inclusive of all taxes</p>
 
-        <div class="font-sans text-sm text-zonura-navy/80 leading-relaxed font-light mb-2 prose max-w-none">
-          {{ product.description }}
+        <div>
+          {% if product.available %}
+            <span class="inline-flex items-center gap-1.5 text-sm font-bold text-green-700 font-sans">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              In Stock
+            </span>
+          {% else %}
+            <span class="inline-flex items-center gap-1.5 text-sm font-bold text-red-600 font-sans">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              Sold Out
+            </span>
+          {% endif %}
+          <p class="font-sans text-xs text-zonura-navy/60 mt-1">Ships directly from ZONURA warehouses. Secure transaction.</p>
         </div>
 
         <!-- Buy Box Form -->
-        <div class="flex flex-col gap-6 mt-8">
-          {% form 'product', product, class: 'flex flex-col gap-3' %}
-            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-            
-            <div class="flex items-center gap-4">
-              <button type="submit" name="add" class="flex-1 py-4 flex items-center justify-center gap-2 rounded-premium bg-zonura-navy text-zonura-sand font-bold font-sans text-sm tracking-wide hover:bg-zonura-navy/90 transition-colors {% unless product.available %}opacity-50 cursor-not-allowed{% endunless %}" {% unless product.available %}disabled{% endunless %}>
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-                {% if product.available %}ADD TO BAG{% else %}SOLD OUT{% endif %}
-              </button>
-              
-              <button type="button" class="wishlist-btn flex-1 py-4 flex items-center justify-center gap-2 rounded-premium border-2 border-zonura-navy/10 text-zonura-navy font-bold font-sans text-sm tracking-wide hover:border-zonura-navy transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-                WISHLIST
-              </button>
-            </div>
-          {% endform %}
-        </div>
-
-        <div class="mt-8 border-t border-b border-zonura-navy/10">
-          <div class="w-full py-5 flex items-center justify-between group cursor-pointer">
-            <span class="font-sans tracking-widest text-sm uppercase text-zonura-navy font-bold">The Details</span>
-          </div>
-          <div class="pb-6">
-            <p class="font-sans text-zonura-navy/80 leading-relaxed font-light text-sm">
-              Wild-harvested ingredients designed to enhance your natural aura and provide deep hydration.
-            </p>
-          </div>
-        </div>
+        {% form 'product', product, class: 'flex flex-col gap-3' %}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          
+          <button type="submit" name="add" class="w-full py-3.5 flex items-center justify-center gap-2 rounded-[14px] bg-zonura-gold hover:bg-zonura-gold/90 text-zonura-navy font-bold font-sans text-sm tracking-wide transition-colors shadow-lg shadow-zonura-gold/20 {% unless product.available %}opacity-50 cursor-not-allowed{% endunless %}" {% unless product.available %}disabled{% endunless %}>
+            {% if product.available %}Buy Now{% else %}Out of Stock{% endif %}
+          </button>
+        {% endform %}
         
+        <button type="button" class="wishlist-btn w-full py-3 flex items-center justify-center gap-2 rounded-[14px] border border-zonura-navy/10 text-zonura-navy font-bold font-sans text-sm tracking-wide hover:bg-zonura-sand transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+          Add to Wishlist
+        </button>
+
       </div>
     </div>
   </div>

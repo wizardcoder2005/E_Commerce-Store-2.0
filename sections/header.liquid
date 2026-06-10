@@ -1,56 +1,81 @@
-<div class="bg-white px-4 py-3 flex items-center justify-between gap-4 lg:gap-8 border-b border-zonura-navy/5 sticky top-0 z-50">
+<div class="flex flex-col sticky top-0 z-50 shadow-sm">
   
-  <!-- Mobile Menu Button (Hamburger) -->
-  <button id="mobile-menu-btn" class="md:hidden p-1 text-zonura-navy focus:outline-none" aria-label="Open menu">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" /></svg>
-  </button>
-
-  <a href="{{ routes.root_url }}" class="flex items-center shrink-0">
-    {% if section.settings.logo != blank %}
-      <img src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ shop.name }}" class="h-8 md:h-10 object-contain" />
-    {% else %}
-      <span class="font-serif text-3xl font-bold tracking-tight text-zonura-navy">{{ shop.name }}</span>
-    {% endif %}
-  </a>
-  
-  <!-- Desktop Navigation -->
-  <div class="hidden md:flex flex-1 items-center justify-start lg:justify-center gap-8 md:ml-8">
-    {% if section.settings.menu != blank %}
-      <nav class="flex items-center gap-6 lg:gap-8">
-        {% for link in linklists[section.settings.menu].links %}
-          <a href="{{ link.url }}" class="font-sans text-[12px] lg:text-[13px] font-bold text-zonura-navy hover:text-zonura-gold transition-colors tracking-wide uppercase">{{ link.title }}</a>
-        {% endfor %}
-      </nav>
-    {% endif %}
+  <!-- STRIP 1: Utility Bar (Deep Navy) -->
+  <div class="bg-zonura-navy text-white px-4 py-1.5 flex justify-between items-center text-xs font-sans">
+    <div class="flex items-center gap-4">
+      <span class="flex items-center gap-1 opacity-90 hover:opacity-100 cursor-pointer transition-opacity">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.242-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+        Deliver to India
+      </span>
+    </div>
+    <div class="hidden md:flex items-center gap-6 opacity-80">
+      <a href="/pages/about" class="hover:text-zonura-gold transition-colors">Our Story</a>
+      <a href="/pages/contact" class="hover:text-zonura-gold transition-colors">Customer Care</a>
+      <a href="/pages/track" class="hover:text-zonura-gold transition-colors">Track Order</a>
+    </div>
   </div>
 
-  <div class="flex-1 max-w-sm hidden lg:block relative">
-    {% if section.settings.show_search %}
-      <form action="{{ routes.search_url }}" method="get" class="relative w-full">
-        <svg class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-zonura-navy/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-        <input type="text" name="q" placeholder="Search..." class="w-full bg-zonura-sand/50 rounded-full py-2.5 px-6 pl-10 text-xs font-sans text-zonura-navy focus:outline-none focus:ring-2 focus:ring-zonura-navy/20 transition-all placeholder:text-zonura-navy/40" />
-      </form>
-    {% endif %}
-  </div>
-
-  <div class="flex items-center gap-4 md:gap-6 shrink-0">
-    <a href="{{ routes.account_url }}" class="flex flex-col items-center gap-1 group hidden md:flex">
-      <svg class="w-6 h-6 text-zonura-navy/80 group-hover:text-zonura-navy transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-      <span class="font-sans text-[10px] uppercase tracking-wider font-bold text-zonura-navy/60 group-hover:text-zonura-navy transition-colors">Profile</span>
-    </a>
+  <!-- STRIP 2: Main Header (White) -->
+  <div class="bg-white px-4 py-4 flex items-center justify-between gap-4 lg:gap-8 border-b border-zonura-navy/5">
     
-    <a href="#" class="flex flex-col items-center gap-1 group hidden md:flex">
-      <svg class="w-6 h-6 text-zonura-navy/80 group-hover:text-zonura-navy transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-      <span class="font-sans text-[10px] uppercase tracking-wider font-bold text-zonura-navy/60 group-hover:text-zonura-navy transition-colors">Wishlist</span>
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="md:hidden p-1 text-zonura-navy focus:outline-none" aria-label="Open menu">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" /></svg>
+    </button>
+
+    <!-- Logo -->
+    <a href="{{ routes.root_url }}" class="flex items-center shrink-0">
+      {% if section.settings.logo != blank %}
+        <img src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ shop.name }}" class="h-8 md:h-10 object-contain" />
+      {% else %}
+        <span class="font-serif text-3xl font-bold tracking-tight text-zonura-navy">{{ shop.name }}</span>
+      {% endif %}
     </a>
 
-    <a href="{{ routes.cart_url }}" class="flex flex-col items-center gap-1 group relative cart-icon-toggle">
-      <div class="relative">
-        <svg class="w-6 h-6 text-zonura-navy/80 group-hover:text-zonura-navy transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-        <span class="cart-count-badge absolute -top-1 -right-1 bg-zonura-gold text-zonura-navy text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center {% if cart.item_count == 0 %}hidden{% endif %}">{{ cart.item_count }}</span>
-      </div>
-      <span class="font-sans text-[10px] uppercase tracking-wider font-bold text-zonura-navy/60 group-hover:text-zonura-navy transition-colors">Bag</span>
-    </a>
+    <!-- Wide Central Search Form (Amazon Style) -->
+    <div class="flex-1 max-w-3xl hidden lg:flex relative mx-4">
+      <form action="{{ routes.search_url }}" method="get" class="relative w-full flex shadow-sm">
+        <input type="text" name="q" placeholder="Search for wellness, serums, oils..." class="w-full bg-zonura-sand/20 border border-zonura-navy/10 rounded-l-md py-2.5 px-6 text-sm font-sans text-zonura-navy focus:outline-none focus:ring-2 focus:ring-zonura-gold/50 focus:border-zonura-gold/50 transition-all placeholder:text-zonura-navy/40" />
+        <button type="submit" class="bg-zonura-gold hover:bg-zonura-gold/90 transition-colors px-6 rounded-r-md text-zonura-navy flex items-center justify-center">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+        </button>
+      </form>
+    </div>
+
+    <!-- Icons -->
+    <div class="flex items-center gap-4 md:gap-8 shrink-0">
+      <a href="{{ routes.account_url }}" class="flex flex-col items-center gap-1 group hidden md:flex">
+        <svg class="w-6 h-6 text-zonura-navy/80 group-hover:text-zonura-navy transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+        <span class="font-sans text-[10px] uppercase tracking-wider font-bold text-zonura-navy/60 group-hover:text-zonura-navy transition-colors">Sign In</span>
+      </a>
+      
+      <a href="#wishlist" class="wishlist-btn flex flex-col items-center gap-1 group hidden md:flex">
+        <svg class="w-6 h-6 text-zonura-navy/80 group-hover:text-zonura-navy transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+        <span class="font-sans text-[10px] uppercase tracking-wider font-bold text-zonura-navy/60 group-hover:text-zonura-navy transition-colors">Wishlist</span>
+      </a>
+
+      <a href="{{ routes.cart_url }}" class="flex items-center gap-2 group relative cart-icon-toggle">
+        <div class="relative">
+          <svg class="w-8 h-8 text-zonura-navy/80 group-hover:text-zonura-navy transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+          <span class="cart-count-badge absolute -top-1 -right-2 bg-zonura-gold text-zonura-navy text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center {% if cart.item_count == 0 %}hidden{% endif %}">{{ cart.item_count }}</span>
+        </div>
+        <span class="font-sans text-[13px] font-bold text-zonura-navy hidden md:block mt-2">Bag</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- STRIP 3: Secondary Categories Navigation (Sand) -->
+  <div class="bg-zonura-sand border-b border-zonura-navy/5 hidden lg:block overflow-x-auto hide-scrollbar">
+    <nav class="flex items-center gap-8 px-6 py-2.5 max-w-[1600px] mx-auto">
+      <button id="mobile-menu-btn-2" class="flex items-center gap-2 font-sans font-bold text-[13px] text-zonura-navy hover:text-zonura-gold transition-colors tracking-wide uppercase whitespace-nowrap">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+        All Categories
+      </button>
+      <div class="h-4 w-px bg-zonura-navy/20"></div>
+      {% for link in linklists[section.settings.menu].links %}
+        <a href="{{ link.url }}" class="font-sans text-[13px] font-bold text-zonura-navy hover:text-zonura-gold transition-colors tracking-wide uppercase whitespace-nowrap">{{ link.title }}</a>
+      {% endfor %}
+    </nav>
   </div>
 </div>
 
