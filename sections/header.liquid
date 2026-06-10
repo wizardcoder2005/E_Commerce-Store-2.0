@@ -1,6 +1,10 @@
 <div class="bg-white px-4 py-3 flex items-center justify-between gap-4 lg:gap-8 border-b border-zonura-navy/5 sticky top-0 z-50">
   <a href="{{ routes.root_url }}" class="flex items-center shrink-0">
-    <span class="font-serif text-3xl font-bold tracking-tight text-zonura-navy">{{ shop.name }}</span>
+    {% if section.settings.logo != blank %}
+      <img src="{{ section.settings.logo | image_url }}" alt="{{ shop.name }}" class="h-8 md:h-10 object-contain" />
+    {% else %}
+      <span class="font-serif text-3xl font-bold tracking-tight text-zonura-navy">{{ shop.name }}</span>
+    {% endif %}
   </a>
   
   <div class="flex-1 max-w-2xl hidden md:block">
@@ -32,3 +36,16 @@
     </a>
   </div>
 </div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Image"
+    }
+  ]
+}
+{% endschema %}
