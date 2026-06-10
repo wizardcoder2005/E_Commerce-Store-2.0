@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ page_title }}</title>
+    {{ content_for_header }}
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN for instant Shopify compatibility) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              zonura: {
+                navy: "#0E1E2E",
+                sand: "#F4F1ED",
+                gold: "#C9A637",
+              }
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Playfair Display", "serif"]
+            },
+            borderRadius: {
+              premium: "14px"
+            }
+          }
+        }
+      }
+    </script>
+    
+    <style>
+      body {
+        background-color: #ffffff;
+        color: #0E1E2E;
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body class="antialiased min-h-screen flex flex-col font-sans">
+    {% section 'header' %}
+    
+    <main id="MainContent" class="flex-grow focus:outline-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+    
+    {% section 'footer' %}
+  </body>
+</html>

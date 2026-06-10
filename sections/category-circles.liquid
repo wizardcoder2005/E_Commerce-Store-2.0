@@ -1,0 +1,24 @@
+<div class="w-full bg-white py-12 border-b border-zonura-navy/5">
+  <div class="max-w-[1600px] mx-auto px-4 md:px-8">
+    <div class="flex gap-6 overflow-x-auto hide-scrollbar pb-4 items-center justify-start md:justify-center">
+      {% for collection in collections limit: 6 %}
+        <a href="{{ collection.url }}" class="flex flex-col items-center gap-3 group shrink-0 w-24">
+          <div class="w-20 h-20 rounded-full overflow-hidden border border-zonura-navy/10 group-hover:border-zonura-gold group-hover:shadow-lg transition-all p-1">
+            {% if collection.image %}
+              <img src="{{ collection.image | img_url: '400x' }}" alt="{{ collection.title }}" class="w-full h-full object-cover rounded-full" />
+            {% else %}
+              <div class="w-full h-full bg-zonura-sand rounded-full"></div>
+            {% endif %}
+          </div>
+          <span class="font-sans text-xs font-bold text-zonura-navy text-center">{{ collection.title }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Category Circles",
+  "presets": [{"name": "Category Circles"}]
+}
+{% endschema %}

@@ -1,0 +1,17 @@
+<div class="relative w-full h-[600px] bg-zonura-navy overflow-hidden">
+  <img src="https://images.unsplash.com/photo-1615397323281-197282717088?q=80&w=2000&auto=format&fit=crop" alt="Hero Banner" class="absolute inset-0 w-full h-full object-cover opacity-70" />
+  <div class="absolute inset-0 bg-gradient-to-t from-zonura-navy/80 to-transparent"></div>
+  <div class="relative h-full flex flex-col justify-end px-8 md:px-16 pb-16 max-w-[1600px] mx-auto">
+    <h1 class="font-serif text-5xl md:text-7xl text-zonura-sand mb-4 leading-tight max-w-3xl">Awaken your aura.</h1>
+    <p class="font-sans text-lg md:text-xl text-zonura-sand/80 max-w-xl mb-8 font-light">Discover botanical essences crafted to restore balance and elevate your daily ritual.</p>
+    <a href="{{ routes.all_products_collection_url }}" class="w-fit bg-zonura-sand text-zonura-navy px-8 py-4 rounded-premium font-sans font-bold text-sm tracking-wide hover:bg-white transition-colors">
+      EXPLORE COLLECTION
+    </a>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Hero Banner",
+  "presets": [{"name": "Hero Banner"}]
+}
+{% endschema %}
