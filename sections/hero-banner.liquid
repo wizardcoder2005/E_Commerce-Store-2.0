@@ -1,28 +1,77 @@
-<div class="relative w-full h-[600px] bg-zonura-navy overflow-hidden">
-  {% if section.settings.image != blank %}
-    <img src="{{ section.settings.image | image_url: width: 2000 }}" alt="{{ section.settings.heading | escape }}" class="absolute inset-0 w-full h-full object-cover opacity-70" />
+{% assign overlay_opacity = section.settings.overlay_opacity | divided_by: 100.0 %}
+
+<div class="relative w-full h-[500px] md:h-[600px] lg:h-[700px] bg-zonura-navy overflow-hidden">
+  
+  <!-- Desktop Image -->
+  {% if section.settings.image_desktop != blank %}
+    <img src="{{ section.settings.image_desktop | image_url: width: 2000 }}" alt="{{ section.settings.heading | escape }}" class="absolute inset-0 w-full h-full object-cover {% if section.settings.image_mobile != blank %}hidden md:block{% endif %}" />
   {% else %}
-    <img src="https://images.unsplash.com/photo-1615397323281-197282717088?q=80&w=2000&auto=format&fit=crop" alt="Hero Banner" class="absolute inset-0 w-full h-full object-cover opacity-70" />
+    <img src="https://images.unsplash.com/photo-1615397323281-197282717088?q=80&w=2000&auto=format&fit=crop" alt="Hero Banner" class="absolute inset-0 w-full h-full object-cover {% if section.settings.image_mobile != blank %}hidden md:block{% endif %}" />
   {% endif %}
-  <div class="absolute inset-0 bg-gradient-to-t from-zonura-navy/80 to-transparent"></div>
-  <div class="relative h-full flex flex-col justify-end px-8 md:px-16 pb-16 max-w-[1600px] mx-auto">
-    <h1 class="font-serif text-5xl md:text-7xl text-zonura-sand mb-4 leading-tight max-w-3xl">{{ section.settings.heading }}</h1>
-    <p class="font-sans text-lg md:text-xl text-zonura-sand/80 max-w-xl mb-8 font-light">{{ section.settings.subheading }}</p>
+
+  <!-- Mobile Image -->
+  {% if section.settings.image_mobile != blank %}
+    <img src="{{ section.settings.image_mobile | image_url: width: 800 }}" alt="{{ section.settings.heading | escape }}" class="absolute inset-0 w-full h-full object-cover md:hidden" />
+  {% endif %}
+
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-t from-zonura-navy to-transparent" style="opacity: {{ overlay_opacity }};"></div>
+  
+  <!-- Content -->
+  <div class="relative h-full flex flex-col justify-end px-6 md:px-16 pb-12 md:pb-20 max-w-[1600px] mx-auto {{ section.settings.text_alignment }}">
+    <h1 class="font-serif text-4xl md:text-6xl lg:text-7xl text-zonura-sand mb-4 leading-tight max-w-3xl">{{ section.settings.heading }}</h1>
+    <p class="font-sans text-base md:text-xl text-zonura-sand/80 max-w-xl mb-8 font-light leading-relaxed">{{ section.settings.subheading }}</p>
     {% if section.settings.button_text != blank %}
-      <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="w-fit bg-zonura-sand text-zonura-navy px-8 py-4 rounded-premium font-sans font-bold text-sm tracking-wide hover:bg-white transition-colors">
+      <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="w-fit bg-zonura-sand text-zonura-navy px-8 py-4 rounded-premium font-sans font-bold text-sm tracking-wide hover:bg-white transition-colors text-center">
         {{ section.settings.button_text }}
       </a>
     {% endif %}
   </div>
 </div>
+
 {% schema %}
 {
   "name": "Hero Banner",
   "settings": [
     {
+      "type": "header",
+      "content": "Images"
+    },
+    {
       "type": "image_picker",
-      "id": "image",
-      "label": "Background Image"
+      "id": "image_desktop",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Image (Optional)",
+      "info": "If provided, this image will show on mobile devices instead of the desktop image."
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Gradient Overlay Opacity",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "text-left items-start", "label": "Left" },
+        { "value": "text-center items-center", "label": "Center" },
+        { "value": "text-right items-end", "label": "Right" }
+      ],
+      "default": "text-left items-start"
     },
     {
       "type": "text",

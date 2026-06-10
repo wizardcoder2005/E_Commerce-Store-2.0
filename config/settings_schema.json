@@ -5,5 +5,28 @@
     "theme_author": "Antigravity",
     "theme_version": "1.0.0",
     "theme_support_url": "https://zonura.com"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary Text / Navy",
+        "default": "#0E1E2E"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent / Gold",
+        "default": "#C9A637"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background / Sand",
+        "default": "#F4F1ED"
+      }
+    ]
   }
 ]

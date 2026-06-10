@@ -1,18 +1,25 @@
-<div class="w-full bg-zonura-sand/20 py-16">
+<div class="w-full bg-zonura-sand/20 py-12 md:py-16">
   <div class="max-w-[1600px] mx-auto px-4 md:px-8">
-    <div class="flex justify-between items-end mb-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
       <div>
-        <h2 class="font-serif text-3xl md:text-4xl text-zonura-navy mb-2">Curated for you</h2>
-        <p class="font-sans text-sm text-zonura-navy/60">The season's most coveted essences.</p>
+        <h2 class="font-serif text-3xl md:text-4xl text-zonura-navy mb-2">{{ section.settings.heading }}</h2>
+        <p class="font-sans text-sm text-zonura-navy/60">{{ section.settings.subheading }}</p>
       </div>
-      <a href="{{ routes.all_products_collection_url }}" class="font-sans text-sm font-bold text-zonura-gold hover:text-zonura-navy transition-colors underline decoration-zonura-gold/30 underline-offset-4">VIEW ALL</a>
+      {% assign collection = collections[section.settings.collection] %}
+      <a href="{{ collection.url | default: routes.all_products_collection_url }}" class="font-sans text-sm font-bold text-zonura-gold hover:text-zonura-navy transition-colors underline decoration-zonura-gold/30 underline-offset-4">VIEW ALL</a>
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-      {% for product in collections['all'].products limit: 4 %}
+      {% assign limit = section.settings.product_limit | default: 4 %}
+      {% assign target_collection = collections[section.settings.collection] %}
+      {% if target_collection == blank %}
+        {% assign target_collection = collections['all'] %}
+      {% endif %}
+      
+      {% for product in target_collection.products limit: limit %}
         <a href="{{ product.url }}" class="group flex flex-col">
           <div class="relative aspect-[4/5] bg-zonura-sand/50 rounded-premium overflow-hidden mb-4">
-            <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title | escape }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div class="absolute inset-0 bg-zonura-navy/0 group-hover:bg-zonura-navy/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
               <span class="bg-white/90 text-zonura-navy px-6 py-3 rounded-premium font-sans text-sm font-bold tracking-wide backdrop-blur-sm">QUICK VIEW</span>
             </div>
@@ -21,7 +28,7 @@
           <p class="font-serif text-zonura-navy/80 text-sm">{{ product.price | money }}</p>
         </a>
       {% else %}
-        <p class="text-zonura-navy">No products found. Please add products to your store.</p>
+        <p class="text-zonura-navy col-span-2 md:col-span-4 py-12 text-center bg-white/50 rounded-premium font-sans text-sm">No products found. Please select a collection in the Theme Editor.</p>
       {% endfor %}
     </div>
   </div>
@@ -29,6 +36,34 @@
 {% schema %}
 {
   "name": "Featured Collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Curated for you"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "The season's most coveted essences."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "min": 4,
+      "max": 12,
+      "step": 4,
+      "label": "Maximum products to show",
+      "default": 4
+    }
+  ],
   "presets": [{"name": "Featured Collection"}]
 }
 {% endschema %}

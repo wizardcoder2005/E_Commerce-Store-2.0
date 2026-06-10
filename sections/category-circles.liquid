@@ -1,24 +1,80 @@
-<div class="w-full bg-white py-12 border-b border-zonura-navy/5">
+<div class="w-full bg-white py-8 md:py-12 border-b border-zonura-navy/5">
   <div class="max-w-[1600px] mx-auto px-4 md:px-8">
-    <div class="flex gap-6 overflow-x-auto hide-scrollbar pb-4 items-center justify-start md:justify-center">
-      {% for collection in collections limit: 6 %}
-        <a href="{{ collection.url }}" class="flex flex-col items-center gap-3 group shrink-0 w-24">
-          <div class="w-20 h-20 rounded-full overflow-hidden border border-zonura-navy/10 group-hover:border-zonura-gold group-hover:shadow-lg transition-all p-1">
-            {% if collection.image %}
-              <img src="{{ collection.image | img_url: '400x' }}" alt="{{ collection.title }}" class="w-full h-full object-cover rounded-full" />
-            {% else %}
-              <div class="w-full h-full bg-zonura-sand rounded-full"></div>
-            {% endif %}
-          </div>
-          <span class="font-sans text-xs font-bold text-zonura-navy text-center">{{ collection.title }}</span>
-        </a>
-      {% endfor %}
+    {% if section.settings.heading != blank %}
+      <h3 class="font-serif text-2xl text-zonura-navy mb-6 text-center md:text-left">{{ section.settings.heading }}</h3>
+    {% endif %}
+    
+    <div class="flex gap-4 md:gap-6 overflow-x-auto hide-scrollbar pb-4 items-center justify-start {% if section.blocks.size > 0 %}md:justify-center{% endif %}">
+      {% if section.blocks.size > 0 %}
+        {% for block in section.blocks %}
+          {% assign collection = collections[block.settings.collection] %}
+          <a href="{{ collection.url | default: '#' }}" class="flex flex-col items-center gap-3 group shrink-0 w-20 md:w-24" {{ block.shopify_attributes }}>
+            <div class="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border border-zonura-navy/10 group-hover:border-zonura-gold group-hover:shadow-lg transition-all p-1">
+              {% if block.settings.custom_image != blank %}
+                <img src="{{ block.settings.custom_image | img_url: '400x' }}" alt="{{ block.settings.custom_title | default: collection.title | escape }}" class="w-full h-full object-cover rounded-full" />
+              {% elsif collection.image != blank %}
+                <img src="{{ collection.image | img_url: '400x' }}" alt="{{ collection.title | escape }}" class="w-full h-full object-cover rounded-full" />
+              {% else %}
+                <div class="w-full h-full bg-zonura-sand rounded-full flex items-center justify-center text-zonura-navy/20 text-xs">IMG</div>
+              {% endif %}
+            </div>
+            <span class="font-sans text-[10px] md:text-xs font-bold text-zonura-navy text-center leading-tight">
+              {{ block.settings.custom_title | default: collection.title | default: 'Collection' }}
+            </span>
+          </a>
+        {% endfor %}
+      {% else %}
+        <!-- Fallback if no blocks added -->
+        {% for collection in collections limit: 6 %}
+          <a href="{{ collection.url }}" class="flex flex-col items-center gap-3 group shrink-0 w-20 md:w-24">
+            <div class="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border border-zonura-navy/10 group-hover:border-zonura-gold group-hover:shadow-lg transition-all p-1">
+              {% if collection.image %}
+                <img src="{{ collection.image | img_url: '400x' }}" alt="{{ collection.title | escape }}" class="w-full h-full object-cover rounded-full" />
+              {% else %}
+                <div class="w-full h-full bg-zonura-sand rounded-full"></div>
+              {% endif %}
+            </div>
+            <span class="font-sans text-[10px] md:text-xs font-bold text-zonura-navy text-center leading-tight">{{ collection.title }}</span>
+          </a>
+        {% endfor %}
+      {% endif %}
     </div>
   </div>
 </div>
 {% schema %}
 {
   "name": "Category Circles",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (Optional)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection Circle",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Link to Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Image (Overrides Collection Image)"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom Title (Overrides Collection Title)"
+        }
+      ]
+    }
+  ],
   "presets": [{"name": "Category Circles"}]
 }
 {% endschema %}

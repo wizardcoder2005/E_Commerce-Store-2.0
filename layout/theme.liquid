@@ -18,9 +18,9 @@
           extend: {
             colors: {
               zonura: {
-                navy: "#0E1E2E",
-                sand: "#F4F1ED",
-                gold: "#C9A637",
+                navy: "{{ settings.color_primary | default: '#0E1E2E' }}",
+                sand: "{{ settings.color_background | default: '#F4F1ED' }}",
+                gold: "{{ settings.color_accent | default: '#C9A637' }}",
               }
             },
             fontFamily: {
