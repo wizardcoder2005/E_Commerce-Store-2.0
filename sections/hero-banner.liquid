@@ -32,16 +32,28 @@
     </div>
 
     <!-- Featured Product Card -->
-    {% if section.settings.featured_product != blank %}
+    {% if section.settings.featured_product != blank or section.settings.featured_product_image != blank %}
       {% assign fp = section.settings.featured_product %}
-      <a href="{{ fp.url }}" class="hidden md:flex flex-col group w-full max-w-[280px] lg:max-w-[320px] bg-white/10 backdrop-blur-md border border-white/20 rounded-premium p-4 shadow-2xl hover:bg-white/20 transition-all shrink-0">
+      <a href="{{ fp.url | default: '#' }}" class="hidden md:flex flex-col group w-full max-w-[280px] lg:max-w-[320px] bg-white/10 backdrop-blur-md border border-white/20 rounded-premium p-4 shadow-2xl hover:bg-white/20 transition-all shrink-0">
         <div class="relative aspect-[4/5] rounded-[10px] overflow-hidden mb-4">
-          <img src="{{ fp.featured_image | image_url: width: 600 }}" alt="{{ fp.title | escape }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+          {% if section.settings.featured_product_image != blank %}
+            <img src="{{ section.settings.featured_product_image | image_url: width: 600 }}" alt="Featured" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+          {% elsif fp != blank and fp.featured_image != blank %}
+            <img src="{{ fp.featured_image | image_url: width: 600 }}" alt="{{ fp.title | escape }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+          {% else %}
+            <div class="w-full h-full bg-zonura-sand/20 flex items-center justify-center text-zonura-sand/50 font-sans text-xs">Upload an Image</div>
+          {% endif %}
           <div class="absolute top-3 left-3 bg-zonura-gold text-zonura-navy text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Featured</div>
         </div>
-        <h3 class="font-sans font-bold text-zonura-sand text-sm lg:text-base mb-1 truncate">{{ fp.title }}</h3>
+        <h3 class="font-sans font-bold text-zonura-sand text-sm lg:text-base mb-1 truncate">{{ fp.title | default: 'Premium Wellness Serum' }}</h3>
         <div class="flex items-center justify-between">
-          <p class="font-serif text-zonura-sand/90 text-sm lg:text-base">{{ fp.price | money }}</p>
+          <p class="font-serif text-zonura-sand/90 text-sm lg:text-base">
+            {% if fp != blank %}
+              {{ fp.price | money }}
+            {% else %}
+              $120.00
+            {% endif %}
+          </p>
           <span class="w-8 h-8 rounded-full bg-zonura-sand text-zonura-navy flex items-center justify-center group-hover:bg-zonura-gold transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
           </span>
@@ -128,6 +140,12 @@
       "id": "featured_product",
       "label": "Featured Product",
       "info": "Select a product to display as a floating glassmorphic card on desktop."
+    },
+    {
+      "type": "image_picker",
+      "id": "featured_product_image",
+      "label": "Custom Product Image Override",
+      "info": "Upload an image here to override the product's default image, or to display a card even if you haven't created any products in Shopify yet."
     }
   ],
   "presets": [
