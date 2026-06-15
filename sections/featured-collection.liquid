@@ -17,16 +17,7 @@
       {% endif %}
       
       {% for product in target_collection.products limit: limit %}
-        <a href="{{ product.url }}" class="group flex flex-col">
-          <div class="relative aspect-[4/5] bg-zonura-sand/50 rounded-premium overflow-hidden mb-4">
-            <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title | escape }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-            <div class="absolute inset-0 bg-zonura-navy/0 group-hover:bg-zonura-navy/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-              <span class="bg-white/90 text-zonura-navy px-6 py-3 rounded-premium font-sans text-sm font-bold tracking-wide backdrop-blur-sm">QUICK VIEW</span>
-            </div>
-          </div>
-          <h3 class="font-sans font-bold text-zonura-navy text-sm md:text-base mb-1 truncate">{{ product.title }}</h3>
-          <p class="font-serif text-zonura-navy/80 text-sm">{{ product.price | money }}</p>
-        </a>
+        {% render 'product-card', product: product %}
       {% else %}
         <p class="text-zonura-navy col-span-2 md:col-span-4 py-12 text-center bg-white/50 rounded-premium font-sans text-sm">No products found. Please select a collection in the Theme Editor.</p>
       {% endfor %}

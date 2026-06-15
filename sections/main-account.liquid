@@ -1,0 +1,82 @@
+<div class="max-w-[1200px] mx-auto px-4 md:px-8 py-12 md:py-20">
+  <div class="flex flex-col md:flex-row gap-12">
+    
+    <!-- Sidebar Navigation -->
+    <div class="w-full md:w-64 shrink-0">
+      <div class="bg-zonura-sand/20 rounded-premium p-6 border border-zonura-navy/5 sticky top-32">
+        <h2 class="font-serif text-2xl text-zonura-navy mb-6">My Account</h2>
+        <nav class="flex flex-col gap-4 font-sans text-sm">
+          <a href="{{ routes.account_url }}" class="flex items-center gap-3 font-bold text-zonura-gold">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+            Order History
+          </a>
+          <a href="{{ routes.account_addresses_url }}" class="flex items-center gap-3 text-zonura-navy/70 hover:text-zonura-navy transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            Addresses ({{ customer.addresses_count }})
+          </a>
+          <a href="/pages/wishlist" class="flex items-center gap-3 text-zonura-navy/70 hover:text-zonura-navy transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+            Wishlist
+          </a>
+          <div class="h-px w-full bg-zonura-navy/10 my-2"></div>
+          <a href="{{ routes.account_logout_url }}" class="flex items-center gap-3 text-zonura-navy/50 hover:text-red-500 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+            Log out
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1">
+      <div class="mb-10">
+        <h3 class="font-sans font-bold text-sm tracking-widest uppercase text-zonura-navy mb-2">Welcome back,</h3>
+        <p class="font-serif text-3xl text-zonura-navy">{{ customer.name }}</p>
+      </div>
+
+      <div class="bg-white border border-zonura-navy/10 rounded-[14px] p-6 md:p-8">
+        <h3 class="font-serif text-2xl text-zonura-navy mb-6">Order History</h3>
+        
+        {% if customer.orders.size > 0 %}
+          <div class="overflow-x-auto">
+            <table class="w-full text-left font-sans text-sm border-collapse">
+              <thead>
+                <tr class="border-b border-zonura-navy/10 text-zonura-navy/60 font-bold uppercase tracking-wider text-xs">
+                  <th class="pb-4 font-normal">Order</th>
+                  <th class="pb-4 font-normal">Date</th>
+                  <th class="pb-4 font-normal">Payment</th>
+                  <th class="pb-4 font-normal">Fulfillment</th>
+                  <th class="pb-4 font-normal text-right">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in customer.orders %}
+                  <tr class="border-b border-zonura-navy/5 hover:bg-zonura-sand/10 transition-colors">
+                    <td class="py-4"><a href="{{ order.customer_url }}" class="font-bold text-zonura-gold hover:text-zonura-navy transition-colors">{{ order.name }}</a></td>
+                    <td class="py-4 text-zonura-navy/80">{{ order.created_at | time_tag: format: 'date' }}</td>
+                    <td class="py-4 text-zonura-navy/80">{{ order.financial_status_label }}</td>
+                    <td class="py-4 text-zonura-navy/80">{{ order.fulfillment_status_label }}</td>
+                    <td class="py-4 text-right font-bold text-zonura-navy">{{ order.total_price | money }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="text-center py-12">
+            <p class="font-sans text-sm text-zonura-navy/60 mb-6">You haven't placed any orders yet.</p>
+            <a href="/collections/all" class="inline-block bg-zonura-navy text-white px-8 py-3 rounded-full font-sans font-bold text-xs uppercase tracking-widest hover:bg-zonura-gold hover:text-zonura-navy transition-colors">Start Shopping</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Account Overview",
+  "settings": []
+}
+{% endschema %}

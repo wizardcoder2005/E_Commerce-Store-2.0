@@ -1,0 +1,52 @@
+<div class="product-recommendations w-full max-w-[1600px] mx-auto px-4 md:px-8 py-12 md:py-16" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=8" data-product-id="{{ product.id }}">
+  {% if recommendations.performed and recommendations.products_count > 0 %}
+    <h2 class="font-serif text-2xl md:text-3xl text-zonura-navy mb-8">{{ section.settings.heading }}</h2>
+    <div class="flex gap-4 md:gap-6 overflow-x-auto hide-scrollbar pb-6 snap-x snap-mandatory">
+      {% for recommendation in recommendations.products %}
+        <div class="snap-start shrink-0 w-[240px] md:w-[280px]">
+          {% render 'product-card', product: recommendation %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const recommendationsSection = document.querySelector('.product-recommendations');
+    if (!recommendationsSection) return;
+
+    const productId = recommendationsSection.dataset.productId;
+    if (!productId) return;
+
+    fetch(recommendationsSection.dataset.url)
+      .then(response => response.text())
+      .then(text => {
+        const html = document.createElement('div');
+        html.innerHTML = text;
+        const recommendations = html.querySelector('.product-recommendations');
+
+        if (recommendations && recommendations.innerHTML.trim().length) {
+          recommendationsSection.innerHTML = recommendations.innerHTML;
+        }
+      })
+      .catch(e => {
+        console.error(e);
+      });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Recommended Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "You Might Also Like"
+    }
+  ],
+  "presets": [{"name": "Recommended Products"}]
+}
+{% endschema %}

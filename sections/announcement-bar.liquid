@@ -1,0 +1,49 @@
+<div class="bg-zonura-gold text-zonura-navy py-2 px-4 relative overflow-hidden" id="announcement-bar">
+  <div class="max-w-[1600px] mx-auto text-center relative h-5">
+    {% for block in section.blocks %}
+      <div class="announcement-slide absolute inset-0 font-sans text-xs font-bold tracking-widest uppercase transition-opacity duration-500 {% if forloop.first %}opacity-100{% else %}opacity-0{% endif %}" {{ block.shopify_attributes }}>
+        {{ block.settings.text }}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const slides = document.querySelectorAll('.announcement-slide');
+    if (slides.length <= 1) return;
+
+    let currentIndex = 0;
+    setInterval(() => {
+      slides[currentIndex].classList.remove('opacity-100');
+      slides[currentIndex].classList.add('opacity-0');
+      
+      currentIndex = (currentIndex + 1) % slides.length;
+      
+      slides[currentIndex].classList.remove('opacity-0');
+      slides[currentIndex].classList.add('opacity-100');
+    }, 3000);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "max_blocks": 3,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [{"name": "Announcement Bar"}]
+}
+{% endschema %}

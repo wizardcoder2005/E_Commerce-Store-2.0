@@ -3,9 +3,26 @@
   
   <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
     
-    <!-- Left Column: Filters -->
-    <aside class="w-full lg:w-64 shrink-0 lg:sticky lg:top-32">
-      <h2 class="font-sans font-bold text-sm tracking-widest uppercase text-zonura-navy mb-6">Filter By</h2>
+    <!-- Mobile Filter Sticky Button -->
+    <div class="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-sm">
+      <button type="button" id="mobile-filter-btn" class="w-full bg-zonura-navy text-white px-6 py-3.5 rounded-full font-sans font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2 shadow-2xl">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
+        Filter & Sort
+      </button>
+    </div>
+
+    <!-- Filter Overlay/Drawer -->
+    <div id="filter-overlay" class="fixed inset-0 bg-zonura-navy/50 backdrop-blur-sm z-[60] opacity-0 pointer-events-none transition-opacity lg:hidden"></div>
+    <aside id="filter-drawer" class="fixed inset-y-0 right-0 w-full max-w-[320px] bg-white z-[70] transform translate-x-full transition-transform lg:static lg:w-64 lg:translate-x-0 lg:shrink-0 lg:z-auto lg:top-32 h-full lg:h-auto overflow-y-auto lg:overflow-visible p-6 lg:p-0 shadow-2xl lg:shadow-none">
+      
+      <div class="flex items-center justify-between lg:hidden mb-8 border-b border-zonura-navy/10 pb-4">
+        <h2 class="font-serif text-2xl text-zonura-navy">Filters</h2>
+        <button type="button" id="filter-close-btn" class="p-2 text-zonura-navy">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+
+      <h2 class="hidden lg:block font-sans font-bold text-sm tracking-widest uppercase text-zonura-navy mb-6">Filter By</h2>
       <form id="collection-filters-form" class="flex flex-col gap-8">
         {% for filter in collection.filters %}
           <div class="border-b border-zonura-navy/10 pb-6">
@@ -50,26 +67,17 @@
       <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
         {% paginate collection.products by 16 %}
           {% for product in collection.products %}
-            <a href="{{ product.url }}" class="group flex flex-col">
-              <div class="relative aspect-[4/5] bg-zonura-sand/50 rounded-[14px] overflow-hidden mb-4 border border-zonura-navy/5">
-                <img src="{{ product.featured_image | img_url: '600x' }}" alt="{{ product.title | escape }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div class="absolute inset-0 bg-zonura-navy/0 group-hover:bg-zonura-navy/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-                  <span class="bg-white/90 text-zonura-navy px-6 py-3 rounded-premium font-sans text-sm font-bold tracking-wide backdrop-blur-sm shadow-xl">QUICK VIEW</span>
-                </div>
-              </div>
-              <h3 class="font-sans font-bold text-zonura-navy text-sm md:text-base mb-1 truncate">{{ product.title }}</h3>
-              <p class="font-serif text-zonura-navy/80 text-sm">{{ product.price | money }}</p>
-            </a>
+            {% render 'product-card', product: product %}
           {% else %}
             <p class="text-zonura-navy col-span-full py-12 text-center bg-zonura-sand/20 rounded-[14px]">No products match your filters.</p>
           {% endfor %}
 
-          <!-- Pagination -->
-          {% if paginate.pages > 1 %}
-            <div class="col-span-full flex justify-center mt-12">
-              <div class="flex items-center gap-4 font-sans text-sm text-zonura-navy">
-                {{ paginate | default_pagination }}
-              </div>
+          <!-- Pagination / Load More -->
+          {% if paginate.next %}
+            <div class="col-span-full flex justify-center mt-12 load-more-container">
+              <button type="button" class="bg-zonura-navy text-white px-8 py-3 rounded-[14px] font-sans font-bold tracking-wider text-sm hover:bg-zonura-navy/90 transition-colors shadow-lg shadow-zonura-navy/20" id="load-more-btn" data-next-url="{{ paginate.next.url }}">
+                LOAD MORE
+              </button>
             </div>
           {% endif %}
         {% endpaginate %}

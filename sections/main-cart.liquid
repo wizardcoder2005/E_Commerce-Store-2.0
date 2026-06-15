@@ -1,0 +1,118 @@
+<div class="max-w-[1200px] mx-auto px-4 md:px-8 py-12 md:py-20">
+  <div class="mb-12">
+    <h1 class="font-serif text-4xl text-zonura-navy mb-4">Your Cart</h1>
+    <a href="/collections/all" class="font-sans text-sm font-bold text-zonura-gold hover:text-zonura-navy underline underline-offset-4 tracking-widest uppercase transition-colors">Continue Shopping</a>
+  </div>
+
+  {% if cart.item_count > 0 %}
+    <form action="{{ routes.cart_url }}" method="post" id="cart-page-form" class="flex flex-col lg:flex-row gap-12">
+      <!-- Cart Items List -->
+      <div class="flex-1 w-full">
+        <!-- Desktop Header -->
+        <div class="hidden md:grid grid-cols-12 gap-4 border-b border-zonura-navy/10 pb-4 mb-6 font-sans font-bold text-xs uppercase tracking-widest text-zonura-navy/60">
+          <div class="col-span-6">Product</div>
+          <div class="col-span-2 text-center">Quantity</div>
+          <div class="col-span-2 text-center">Total</div>
+          <div class="col-span-2 text-right">Remove</div>
+        </div>
+
+        {% for item in cart.items %}
+          <div class="flex flex-col md:grid md:grid-cols-12 gap-4 md:items-center py-6 border-b border-zonura-navy/5 relative group">
+            
+            <!-- Product -->
+            <div class="col-span-6 flex gap-6 items-start md:items-center">
+              <a href="{{ item.url }}">
+                <img src="{{ item.image | img_url: '200x' }}" alt="{{ item.title | escape }}" class="w-24 h-32 md:w-20 md:h-24 object-cover rounded-md border border-zonura-navy/10" />
+              </a>
+              <div class="flex flex-col">
+                <a href="{{ item.url }}" class="font-sans font-bold text-zonura-navy text-base md:text-sm hover:text-zonura-gold transition-colors">{{ item.product.title }}</a>
+                {% if item.variant.title != 'Default Title' %}
+                  <p class="font-sans text-sm md:text-xs text-zonura-navy/60 mt-1">{{ item.variant.title }}</p>
+                {% endif %}
+                <p class="font-serif text-zonura-navy text-sm mt-2 md:hidden">{{ item.price | money }}</p>
+              </div>
+            </div>
+
+            <!-- Quantity -->
+            <div class="col-span-2 flex items-center justify-start md:justify-center mt-4 md:mt-0">
+              <div class="flex items-center border border-zonura-navy/20 rounded-full bg-white h-10 w-32 md:w-auto px-4 justify-between">
+                <button type="submit" name="updates[{{ item.key }}]" value="{{ item.quantity | minus: 1 }}" class="text-zonura-navy/60 hover:text-zonura-navy pb-1 focus:outline-none">-</button>
+                <input type="number" name="updates[{{ item.key }}]" value="{{ item.quantity }}" min="0" class="w-8 text-center bg-transparent border-none text-sm font-sans font-bold text-zonura-navy focus:outline-none focus:ring-0" />
+                <button type="submit" name="updates[{{ item.key }}]" value="{{ item.quantity | plus: 1 }}" class="text-zonura-navy/60 hover:text-zonura-navy pb-1 focus:outline-none">+</button>
+              </div>
+            </div>
+
+            <!-- Total -->
+            <div class="col-span-2 text-center hidden md:block">
+              <span class="font-serif font-bold text-zonura-navy text-lg">{{ item.final_line_price | money }}</span>
+            </div>
+
+            <!-- Remove -->
+            <div class="col-span-2 text-right absolute md:static top-6 right-0">
+              <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="text-zonura-navy/40 hover:text-red-500 transition-colors p-2 md:p-0 flex justify-end">
+                <svg class="w-5 h-5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              </a>
+            </div>
+
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Order Summary Sidebar -->
+      <div class="w-full lg:w-[380px] shrink-0">
+        <div class="bg-zonura-sand/20 rounded-premium p-8 border border-zonura-navy/5 sticky top-32 shadow-xl shadow-zonura-navy/5">
+          <h2 class="font-sans font-bold text-zonura-navy tracking-widest uppercase mb-6 text-sm">Order Summary</h2>
+          
+          <div class="flex justify-between items-center mb-4 text-sm font-sans text-zonura-navy/80">
+            <span>Subtotal</span>
+            <span class="font-bold">{{ cart.total_price | money }}</span>
+          </div>
+          
+          <div class="flex justify-between items-center mb-6 text-sm font-sans text-zonura-navy/80 border-b border-zonura-navy/10 pb-6">
+            <span>Shipping</span>
+            <span>Calculated at checkout</span>
+          </div>
+
+          <!-- Discount Code (UI Note: will apply on checkout page) -->
+          <div class="mb-6 relative">
+            <input type="text" id="discount-code" placeholder="Discount code" class="w-full bg-white border border-zonura-navy/10 rounded-[10px] py-3 px-4 font-sans text-sm focus:outline-none focus:border-zonura-gold" />
+            <button type="button" class="absolute right-3 top-3 text-xs font-bold font-sans text-zonura-navy hover:text-zonura-gold uppercase tracking-widest">Apply</button>
+          </div>
+
+          <div class="flex justify-between items-center mb-8">
+            <span class="font-serif text-xl font-bold text-zonura-navy">Total</span>
+            <span class="font-serif text-2xl font-bold text-zonura-navy">{{ cart.total_price | money }}</span>
+          </div>
+
+          <button type="submit" name="checkout" class="w-full py-4 rounded-premium bg-zonura-navy text-zonura-sand font-bold font-sans text-sm tracking-widest uppercase hover:bg-zonura-navy/90 transition-colors shadow-lg shadow-zonura-navy/20 flex justify-center items-center gap-2 mb-6 group">
+            <svg class="w-5 h-5 text-zonura-sand/70 group-hover:text-zonura-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+            Secure Checkout
+          </button>
+
+          <!-- Trust Badges -->
+          <div class="flex justify-center gap-3 items-center opacity-70">
+            <div class="bg-white px-2 py-1 rounded text-[10px] font-bold text-zonura-navy border border-zonura-navy/10">UPI</div>
+            <div class="bg-white px-2 py-1 rounded text-[10px] font-bold text-zonura-navy border border-zonura-navy/10">Razorpay</div>
+            <div class="bg-white px-2 py-1 rounded text-[10px] font-bold text-zonura-navy border border-zonura-navy/10">Visa/MC</div>
+            <div class="bg-white px-2 py-1 rounded text-[10px] font-bold text-zonura-navy border border-zonura-navy/10">COD</div>
+          </div>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <!-- Empty State -->
+    <div class="flex flex-col items-center justify-center py-20 bg-zonura-sand/20 rounded-[14px] border border-zonura-navy/5 text-center">
+      <svg class="w-16 h-16 text-zonura-navy/20 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+      <p class="font-serif text-3xl text-zonura-navy mb-4">Your cart is empty.</p>
+      <p class="font-sans text-sm text-zonura-navy/60 mb-8 max-w-sm">Looks like you haven't added anything to your cart yet. Discover our wellness collection to get started.</p>
+      <a href="/collections/all" class="bg-zonura-navy text-white px-8 py-4 rounded-full font-sans font-bold text-sm tracking-widest uppercase hover:bg-zonura-gold hover:text-zonura-navy transition-colors shadow-lg">Start Shopping</a>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Cart Page",
+  "settings": []
+}
+{% endschema %}

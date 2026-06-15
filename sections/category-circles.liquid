@@ -4,16 +4,16 @@
       <h3 class="font-serif text-2xl text-zonura-navy mb-6 text-center md:text-left">{{ section.settings.heading }}</h3>
     {% endif %}
     
-    <div class="flex gap-4 md:gap-6 overflow-x-auto hide-scrollbar pb-4 items-center justify-start {% if section.blocks.size > 0 %}md:justify-center{% endif %}">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 justify-center max-w-4xl mx-auto">
       {% if section.blocks.size > 0 %}
         {% for block in section.blocks %}
           {% assign collection = collections[block.settings.collection] %}
-          <a href="{{ collection.url | default: '#' }}" class="flex flex-col items-center gap-3 group shrink-0 w-20 md:w-24" {{ block.shopify_attributes }}>
+          <a href="{{ collection.url | default: '#' }}" class="flex flex-col items-center gap-3 group" {{ block.shopify_attributes }}>
             <div class="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border border-zonura-navy/10 group-hover:border-zonura-gold group-hover:shadow-lg transition-all p-1">
               {% if block.settings.custom_image != blank %}
-                <img src="{{ block.settings.custom_image | img_url: '400x' }}" alt="{{ block.settings.custom_title | default: collection.title | escape }}" class="w-full h-full object-cover rounded-full" />
+                <img src="{{ block.settings.custom_image | img_url: '400x' }}" alt="{{ block.settings.custom_image.alt | escape | default: block.settings.custom_title | default: collection.title | escape }}" class="w-full h-full object-cover rounded-full" />
               {% elsif collection.image != blank %}
-                <img src="{{ collection.image | img_url: '400x' }}" alt="{{ collection.title | escape }}" class="w-full h-full object-cover rounded-full" />
+                <img src="{{ collection.image | img_url: '400x' }}" alt="{{ collection.image.alt | escape | default: collection.title | escape }}" class="w-full h-full object-cover rounded-full" />
               {% else %}
                 <div class="w-full h-full bg-zonura-sand rounded-full flex items-center justify-center text-zonura-navy/20 text-xs">IMG</div>
               {% endif %}
@@ -26,10 +26,10 @@
       {% else %}
         <!-- Fallback if no blocks added -->
         {% for collection in collections limit: 6 %}
-          <a href="{{ collection.url }}" class="flex flex-col items-center gap-3 group shrink-0 w-20 md:w-24">
+          <a href="{{ collection.url }}" class="flex flex-col items-center gap-3 group">
             <div class="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border border-zonura-navy/10 group-hover:border-zonura-gold group-hover:shadow-lg transition-all p-1">
               {% if collection.image %}
-                <img src="{{ collection.image | img_url: '400x' }}" alt="{{ collection.title | escape }}" class="w-full h-full object-cover rounded-full" />
+                <img src="{{ collection.image | img_url: '400x' }}" alt="{{ collection.image.alt | escape | default: collection.title | escape }}" class="w-full h-full object-cover rounded-full" />
               {% else %}
                 <div class="w-full h-full bg-zonura-sand rounded-full"></div>
               {% endif %}

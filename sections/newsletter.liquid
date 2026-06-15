@@ -1,0 +1,100 @@
+<div class="py-16 md:py-24 bg-zonura-sand/30 border-y border-zonura-navy/5">
+  <div class="max-w-2xl mx-auto px-4 md:px-8 text-center">
+    <h2 class="font-serif text-3xl md:text-4xl text-zonura-navy mb-4">{{ section.settings.heading }}</h2>
+    <p class="font-sans text-sm md:text-base text-zonura-navy/70 mb-8 max-w-lg mx-auto">{{ section.settings.subheading }}</p>
+
+    <!-- Ajax Newsletter Form -->
+    {% form 'customer', id: 'newsletter-form', class: 'relative w-full max-w-md mx-auto' %}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      
+      {% if form.posted_successfully? %}
+        <div class="bg-green-50 text-green-700 font-sans text-sm px-6 py-4 rounded-[14px] border border-green-200">
+          Thanks for subscribing! Check your email for your 10% off code.
+        </div>
+      {% else %}
+        <div class="flex relative shadow-lg shadow-zonura-navy/5 rounded-full overflow-hidden">
+          <input type="email" 
+                 name="contact[email]" 
+                 id="Email" 
+                 class="w-full bg-white text-zonura-navy font-sans text-sm px-6 py-4 focus:outline-none focus:ring-2 focus:ring-zonura-gold" 
+                 placeholder="Enter your email address" 
+                 required 
+                 {% if form.errors %}aria-invalid="true"{% endif %}
+          >
+          <button type="submit" name="commit" class="bg-zonura-navy text-white px-8 py-4 font-sans text-sm font-bold tracking-widest uppercase hover:bg-zonura-gold hover:text-zonura-navy transition-colors shrink-0">
+            Subscribe
+          </button>
+        </div>
+        {% if form.errors %}
+          <div class="text-red-500 font-sans text-xs mt-3 text-left pl-6">
+            {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endform %}
+  </div>
+</div>
+
+<script>
+  // Advanced AJAX submit logic could go here, but native Shopify Forms
+  // reload the page with a hash/success state. To prevent reload entirely,
+  // we would need a custom app endpoint. For Shopify native, it reloads but scrolls to form.
+  // To truly prevent reload, we intercept and post via fetch:
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('#newsletter-form');
+    if(form) {
+      form.addEventListener('submit', function(e) {
+        // Basic AJAX implementation for Shopify Contact forms
+        e.preventDefault();
+        const formData = new FormData(form);
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerText;
+        submitBtn.innerText = 'WAIT...';
+        submitBtn.disabled = true;
+
+        fetch(window.location.pathname, {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.text())
+        .then(html => {
+          // Parse response to find form success state
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const newForm = doc.querySelector('#newsletter-form');
+          if (newForm) {
+            form.innerHTML = newForm.innerHTML;
+          } else {
+            // Fallback success message
+            form.innerHTML = '<div class="bg-green-50 text-green-700 font-sans text-sm px-6 py-4 rounded-[14px] border border-green-200">Thanks for subscribing! Check your email for your 10% off code.</div>';
+          }
+        })
+        .catch(err => {
+          submitBtn.innerText = originalText;
+          submitBtn.disabled = false;
+        });
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Newsletter Signup",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get 10% Off Your First Order"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subtext",
+      "default": "Join 10,000+ Zonura members for exclusive deals, wellness tips, and early access."
+    }
+  ],
+  "presets": [{"name": "Newsletter"}]
+}
+{% endschema %}

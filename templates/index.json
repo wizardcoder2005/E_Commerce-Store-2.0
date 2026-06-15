@@ -27,6 +27,9 @@
         "heading": ""
       }
     },
+    "deals": {
+      "type": "todays-deals"
+    },
     "featured": {
       "type": "featured-collection",
       "settings": {
@@ -35,11 +38,28 @@
         "collection": "",
         "product_limit": 4
       }
+    },
+    "trust": {
+      "type": "trust-bar"
+    },
+    "rv": {
+      "type": "recently-viewed"
+    },
+    "instagram": {
+      "type": "instagram-feed"
+    },
+    "newsletter": {
+      "type": "newsletter"
     }
   },
   "order": [
     "hero",
     "categories",
-    "featured"
+    "deals",
+    "featured",
+    "trust",
+    "rv",
+    "instagram",
+    "newsletter"
   ]
 }

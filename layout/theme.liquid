@@ -5,8 +5,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>{{ page_title }}</title>
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+    <link rel="canonical" href="{{ canonical_url }}">
     {{ content_for_header }}
     
+    {% if template == 'product' %}
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "{{ product.title | escape }}",
+        "image": "{{ product.featured_image | img_url: '1200x' }}",
+        "description": "{{ product.description | strip_html | truncate: 200 | escape }}",
+        "offers": {
+          "@type": "Offer",
+          "price": "{{ product.price | divided_by: 100.0 }}",
+          "priceCurrency": "INR",
+          "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
+        }
+      }
+      </script>
+    {% endif %}
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
     
@@ -49,7 +70,8 @@
       }
     </style>
   </head>
-  <body class="antialiased min-h-screen flex flex-col font-sans">
+  <body class="antialiased min-h-screen flex flex-col font-sans relative">
+    {% section 'announcement-bar' %}
     {% section 'header' %}
     
     <main id="MainContent" class="flex-grow focus:outline-none" role="main" tabindex="-1">
@@ -79,17 +101,42 @@
         </div>
       </div>
       
-      <div class="p-6 border-t border-zonura-navy/10 bg-white">
+      <!-- Free Shipping Bar (Mock up calculation in JS if needed, static HTML for layout) -->
+      <div class="px-6 py-3 bg-zonura-sand/30 border-t border-zonura-navy/10 text-center">
+        <p class="font-sans text-xs font-bold text-zonura-navy mb-2" id="free-shipping-text">You are <span class="text-zonura-gold">Rs. 499</span> away from FREE shipping!</p>
+        <div class="w-full bg-white h-2 rounded-full overflow-hidden shadow-inner">
+          <div class="bg-zonura-gold h-full w-[20%]" id="free-shipping-progress"></div>
+        </div>
+      </div>
+
+      <div class="p-6 border-t border-zonura-navy/10 bg-white shadow-[0_-10px_30px_rgba(14,30,46,0.05)]">
         <div class="flex justify-between items-center mb-6">
           <span class="font-sans font-bold text-zonura-navy uppercase tracking-widest text-sm">Subtotal</span>
-          <span id="cart-total" class="font-serif text-2xl font-bold text-zonura-navy">$0.00</span>
+          <span id="cart-total" class="font-serif text-2xl font-bold text-zonura-navy">{{ cart.total_price | money }}</span>
         </div>
         <p class="font-sans text-xs text-zonura-navy/60 mb-6 text-center">Shipping & taxes calculated at checkout.</p>
-        <a href="{{ routes.cart_url }}" class="block w-full py-4 text-center rounded-premium bg-zonura-navy text-zonura-sand font-bold font-sans text-sm tracking-widest uppercase hover:bg-zonura-navy/90 transition-colors shadow-lg shadow-zonura-navy/20">
-          PROCEED TO CHECKOUT
-        </a>
+        <form action="{{ routes.cart_url }}" method="post" id="cart-drawer-form">
+          <button type="submit" name="checkout" class="block w-full py-4 text-center rounded-premium bg-zonura-navy text-zonura-sand font-bold font-sans text-sm tracking-widest uppercase hover:bg-zonura-gold hover:text-zonura-navy transition-colors shadow-lg shadow-zonura-navy/20 mb-4">
+            PROCEED TO CHECKOUT
+          </button>
+        </form>
+        <a href="#" id="continue-shopping" class="block text-center w-full font-sans text-xs font-bold text-zonura-navy/60 hover:text-zonura-navy uppercase tracking-widest">Continue Shopping</a>
       </div>
     </div>
+
+    <!-- Back to Top & Cookie Banner -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 z-40 bg-zonura-navy text-white p-3 rounded-full shadow-2xl hover:bg-zonura-gold hover:text-zonura-navy transition-all translate-y-20 opacity-0 hidden md:block focus:outline-none">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
+    </button>
+
+    <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-zonura-navy text-white py-4 px-6 z-50 transform translate-y-full transition-transform duration-500 shadow-[0_-10px_30px_rgba(0,0,0,0.2)]">
+      <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="font-sans text-sm text-center md:text-left text-white/90">We use cookies to improve your experience. By continuing to visit this site you agree to our use of cookies.</p>
+        <div class="flex items-center gap-4 shrink-0">
+          <a href="/policies/privacy-policy" class="font-sans text-xs font-bold text-white/60 hover:text-white transition-colors underline underline-offset-2">Learn More</a>
+          <button id="accept-cookies" class="bg-zonura-gold text-zonura-navy px-6 py-2 rounded-full font-sans font-bold text-xs uppercase tracking-widest hover:bg-white transition-colors">Accept</button>
+        </div>
+      </div>
 
     <!-- Theme Interactive JS -->
     <script src="{{ 'theme.js' | asset_url }}" defer></script>

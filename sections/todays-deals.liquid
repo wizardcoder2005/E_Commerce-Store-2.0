@@ -1,0 +1,95 @@
+<div class="bg-zonura-sand/20 py-12 border-y border-zonura-navy/5">
+  <div class="max-w-[1600px] mx-auto px-4 md:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+      <div class="flex items-center gap-4">
+        <h2 class="font-serif text-3xl md:text-4xl text-zonura-navy">{{ section.settings.heading }}</h2>
+        <div class="bg-red-600 text-white font-sans text-sm font-bold tracking-widest px-4 py-1.5 rounded-full flex items-center gap-2">
+          ⚡ Ends in <span id="deal-timer" class="tabular-nums">23:59:59</span>
+        </div>
+      </div>
+      <a href="{{ collections['deals'].url | default: '/collections/all' }}" class="font-sans text-sm font-bold text-zonura-gold hover:text-zonura-navy transition-colors underline decoration-zonura-gold/30 underline-offset-4">VIEW ALL DEALS</a>
+    </div>
+
+    <!-- Horizontal Scroll Container -->
+    <div class="flex gap-6 overflow-x-auto hide-scrollbar pb-6 snap-x snap-mandatory">
+      {% assign deals_collection = collections['deals'] %}
+      {% if deals_collection != blank and deals_collection.products.size > 0 %}
+        {% for product in deals_collection.products limit: 10 %}
+          <div class="snap-start shrink-0 w-[280px] md:w-[320px]">
+            {% render 'product-card', product: product %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <!-- Fallback to all products with discount -->
+        {% assign deals_found = 0 %}
+        {% for product in collections['all'].products %}
+          {% if product.compare_at_price > product.price and deals_found < 10 %}
+            <div class="snap-start shrink-0 w-[280px] md:w-[320px]">
+              {% render 'product-card', product: product %}
+            </div>
+            {% assign deals_found = deals_found | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+        {% if deals_found == 0 %}
+          <div class="w-full py-12 text-center text-zonura-navy/60 font-sans">No deals currently available. Check back soon!</div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const timerElement = document.getElementById('deal-timer');
+    if (!timerElement) return;
+
+    // Reset anchor in localStorage
+    const now = new Date().getTime();
+    let resetTime = localStorage.getItem('zonura_deals_reset');
+    
+    // If no reset time or it's in the past, set it to 24h from now
+    if (!resetTime || now > parseInt(resetTime)) {
+      resetTime = now + (24 * 60 * 60 * 1000); // 24 hours
+      localStorage.setItem('zonura_deals_reset', resetTime);
+    }
+
+    function updateTimer() {
+      const currentTime = new Date().getTime();
+      const distance = parseInt(resetTime) - currentTime;
+
+      if (distance < 0) {
+        // Reset again
+        resetTime = currentTime + (24 * 60 * 60 * 1000);
+        localStorage.setItem('zonura_deals_reset', resetTime);
+        return;
+      }
+
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      timerElement.textContent = 
+        String(hours).padStart(2, '0') + ':' + 
+        String(minutes).padStart(2, '0') + ':' + 
+        String(seconds).padStart(2, '0');
+    }
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Today's Deals",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Today's Deals"
+    }
+  ],
+  "presets": [{"name": "Today's Deals"}]
+}
+{% endschema %}

@@ -1,0 +1,6 @@
+{% layout none %}
+{% for item in search.results %}
+  {% if item.object_type == 'product' %}
+    {% render 'product-card', product: item %}
+  {% endif %}
+{% endfor %}
