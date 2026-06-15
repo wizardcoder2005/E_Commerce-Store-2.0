@@ -1,13 +1,40 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
-      "type": "hero-banner"
+      "type": "hero-banner",
+      "settings": {
+        "overlay_opacity": 80,
+        "text_alignment": "text-left items-start",
+        "heading": "Awaken your aura.",
+        "subheading": "Discover botanical essences crafted to restore balance and elevate your daily ritual.",
+        "button_text": "EXPLORE COLLECTION",
+        "button_link": "",
+        "featured_product": ""
+      }
     },
     "categories": {
-      "type": "category-circles"
+      "type": "category-circles",
+      "settings": {
+        "heading": ""
+      }
     },
     "featured": {
-      "type": "featured-collection"
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Curated for you",
+        "subheading": "The season's most coveted essences.",
+        "collection": "",
+        "product_limit": 4
+      }
     }
   },
   "order": [
