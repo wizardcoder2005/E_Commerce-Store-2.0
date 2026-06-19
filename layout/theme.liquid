@@ -9,6 +9,25 @@
       <meta name="description" content="{{ page_description | escape }}">
     {% endif %}
     <link rel="canonical" href="{{ canonical_url }}">
+    
+    {% if settings.favicon != blank %}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {% endif %}
+
+    <!-- Open Graph & Social Sharing Meta Tags -->
+    <meta property="og:site_name" content="{{ shop.name }}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:title" content="{{ page_title }}">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="{{ page_description | escape }}">
+    {% if template contains 'product' %}
+      <meta property="og:image" content="http:{{ product.featured_image | image_url: width: 1200 }}">
+      <meta property="og:image:secure_url" content="https:{{ product.featured_image | image_url: width: 1200 }}">
+    {% elsif settings.social_sharing_logo != blank %}
+      <meta property="og:image" content="http:{{ settings.social_sharing_logo | image_url: width: 1200 }}">
+      <meta property="og:image:secure_url" content="https:{{ settings.social_sharing_logo | image_url: width: 1200 }}">
+    {% endif %}
+
     {{ content_for_header }}
     
     {% if template == 'product' %}
