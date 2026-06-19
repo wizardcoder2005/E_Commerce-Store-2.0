@@ -13,20 +13,20 @@
       {
         "type": "color",
         "id": "color_primary",
-        "label": "Primary Color (Navy)",
-        "default": "#0E1E2E"
+        "label": "Primary Color (Navy/Charcoal)",
+        "default": "#1A1A1A"
       },
       {
         "type": "color",
         "id": "color_background",
-        "label": "Background Color (Sand)",
-        "default": "#F4F1ED"
+        "label": "Background Color (Alabaster)",
+        "default": "#FAFAFA"
       },
       {
         "type": "color",
         "id": "color_accent",
-        "label": "Accent Color (Gold)",
-        "default": "#C9A637"
+        "label": "Accent Color (Taupe)",
+        "default": "#BBAF9E"
       }
     ]
   },

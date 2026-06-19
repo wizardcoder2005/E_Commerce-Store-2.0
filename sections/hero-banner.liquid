@@ -22,10 +22,10 @@
 
           <!-- Content -->
           <div class="absolute inset-0 flex flex-col justify-end md:justify-center p-6 md:p-16 max-w-[1600px] mx-auto text-center md:text-left">
-            <h2 class="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-4 leading-tight drop-shadow-md">{{ block.settings.heading }}</h2>
-            <p class="font-sans text-base md:text-xl text-white/90 max-w-xl mb-8 md:mb-10 font-light leading-relaxed drop-shadow-md">{{ block.settings.subheading }}</p>
+            <h2 class="font-serif text-5xl md:text-7xl lg:text-9xl text-white mb-4 leading-tight luxury-fade-up">{{ block.settings.heading }}</h2>
+            <p class="font-sans text-base md:text-xl text-white/90 max-w-xl mb-8 md:mb-10 font-light leading-relaxed luxury-fade-up luxury-delay-100">{{ block.settings.subheading }}</p>
             {% if block.settings.button_text != blank %}
-              <a href="{{ block.settings.button_link | default: '/collections/all' }}" class="inline-block bg-zonura-gold text-zonura-navy px-8 py-3 rounded-[10px] font-sans font-bold text-sm tracking-wider hover:bg-white transition-colors text-center w-max shadow-xl self-center md:self-start">
+              <a href="{{ block.settings.button_link | default: '/collections/all' }}" class="inline-block bg-zonura-gold text-zonura-navy px-8 py-3 rounded-[10px] font-sans font-medium text-sm tracking-wider hover:bg-white transition-colors text-center w-max self-center md:self-start luxury-fade-up luxury-delay-200">
                 {{ block.settings.button_text }}
               </a>
             {% endif %}
@@ -40,9 +40,9 @@
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
         <div class="absolute inset-0 flex flex-col justify-end md:justify-center p-6 md:p-16 max-w-[1600px] mx-auto text-center md:text-left">
-          <h2 class="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-4 leading-tight drop-shadow-md">Elevate Every Day</h2>
-          <p class="font-sans text-base md:text-xl text-white/90 max-w-xl mb-8 md:mb-10 font-light leading-relaxed drop-shadow-md">Wellness tools for the modern lifestyle</p>
-          <a href="/collections/all" class="inline-block bg-zonura-gold text-zonura-navy px-8 py-3 rounded-[10px] font-sans font-bold text-sm tracking-wider hover:bg-white transition-colors text-center w-max shadow-xl self-center md:self-start">
+          <h2 class="font-serif text-5xl md:text-7xl lg:text-9xl text-white mb-4 leading-tight luxury-fade-up">Elevate Every Day</h2>
+          <p class="font-sans text-base md:text-xl text-white/90 max-w-xl mb-8 md:mb-10 font-light leading-relaxed luxury-fade-up luxury-delay-100">Wellness tools for the modern lifestyle</p>
+          <a href="/collections/all" class="inline-block bg-zonura-gold text-zonura-navy px-8 py-3 rounded-[10px] font-sans font-medium text-sm tracking-wider hover:bg-white transition-colors text-center w-max self-center md:self-start luxury-fade-up luxury-delay-200">
             Shop Now
           </a>
         </div>

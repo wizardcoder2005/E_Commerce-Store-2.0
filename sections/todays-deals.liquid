@@ -1,21 +1,22 @@
-<div class="bg-zonura-sand/20 py-12 border-y border-zonura-navy/5">
+<div class="bg-transparent py-24 md:py-32">
   <div class="max-w-[1600px] mx-auto px-4 md:px-8">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4 luxury-fade-up">
       <div class="flex items-center gap-4">
-        <h2 class="font-serif text-3xl md:text-4xl text-zonura-navy">{{ section.settings.heading }}</h2>
-        <div class="bg-red-600 text-white font-sans text-sm font-bold tracking-widest px-4 py-1.5 rounded-full flex items-center gap-2">
-          ⚡ Ends in <span id="deal-timer-{{ section.id }}" class="tabular-nums">23:59:59</span>
+        <h2 class="font-serif text-4xl md:text-5xl text-zonura-navy font-light">{{ section.settings.heading }}</h2>
+        <span class="text-zonura-navy/20 hidden md:block text-2xl font-light">|</span>
+        <div class="text-zonura-navy/60 font-sans text-xs font-medium tracking-widest flex items-center gap-2 uppercase">
+          Ends in <span id="deal-timer-{{ section.id }}" class="tabular-nums font-serif text-lg">23:59:59</span>
         </div>
       </div>
       {% assign target_collection = collections[section.settings.collection] %}
-      <a href="{{ target_collection.url | default: '/collections/all' }}" class="font-sans text-sm font-bold text-zonura-gold hover:text-zonura-navy transition-colors underline decoration-zonura-gold/30 underline-offset-4">VIEW ALL DEALS</a>
+      <a href="{{ target_collection.url | default: '/collections/all' }}" class="font-sans text-xs font-medium text-zonura-navy/60 hover:text-zonura-gold transition-colors uppercase tracking-widest border-b border-zonura-navy/20 hover:border-zonura-gold pb-1">VIEW ALL</a>
     </div>
 
     <!-- Horizontal Scroll Container -->
-    <div class="flex gap-6 overflow-x-auto hide-scrollbar pb-6 snap-x snap-mandatory">
+    <div class="flex gap-6 md:gap-10 overflow-x-auto hide-scrollbar pb-6 luxury-fade-up luxury-delay-200">
       {% if target_collection != blank and target_collection.products.size > 0 %}
         {% for product in target_collection.products limit: 10 %}
-          <div class="snap-start shrink-0 w-[280px] md:w-[320px]">
+          <div class="shrink-0 w-[280px] md:w-[360px]">
             {% render 'product-card', product: product %}
           </div>
         {% endfor %}
@@ -24,7 +25,7 @@
         {% assign deals_found = 0 %}
         {% for product in collections['all'].products %}
           {% if product.compare_at_price > product.price and deals_found < 10 %}
-            <div class="snap-start shrink-0 w-[280px] md:w-[320px]">
+            <div class="shrink-0 w-[280px] md:w-[360px]">
               {% render 'product-card', product: product %}
             </div>
             {% assign deals_found = deals_found | plus: 1 %}

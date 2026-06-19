@@ -1,7 +1,7 @@
 <div class="flex flex-col sticky top-0 z-50 shadow-sm relative">
   <!-- Utility Bar (top, small) -->
   {% if section.settings.show_utility_bar %}
-    <div class="bg-zonura-navy text-white px-4 py-1.5 flex justify-between items-center text-xs font-sans">
+    <div class="bg-transparent border-b border-zonura-navy/5 text-zonura-navy/80 px-4 py-1.5 flex justify-between items-center text-xs font-sans tracking-wide">
       <div class="flex items-center gap-4">
         {% if section.settings.utility_text_1 != blank %}
           <span class="flex items-center gap-1 opacity-90">
@@ -12,7 +12,7 @@
           <span class="hidden md:block opacity-90">|</span>
         {% endif %}
         {% if section.settings.utility_text_2 != blank %}
-          <span class="hidden md:block opacity-90 font-bold text-zonura-gold">{{ section.settings.utility_text_2 }}</span>
+          <span class="hidden md:block opacity-90 font-medium text-zonura-gold">{{ section.settings.utility_text_2 }}</span>
         {% endif %}
       </div>
       <div class="flex items-center gap-4 md:gap-6 opacity-90">
@@ -30,7 +30,7 @@
   {% endif %}
 
   <!-- Main Navigation -->
-  <div class="bg-white px-4 lg:px-8 py-4 flex items-center justify-between border-b border-zonura-navy/5">
+  <div class="bg-transparent px-4 lg:px-8 py-4 flex items-center justify-between">
     
     <!-- Mobile Hamburger -->
     <button id="mobile-menu-btn" class="lg:hidden p-1 text-zonura-navy focus:outline-none" aria-label="Open menu">
@@ -54,7 +54,7 @@
           {% if link.links.size > 0 %}
             <!-- Dropdown Trigger -->
             <div class="group relative py-4">
-              <button class="flex items-center gap-1 font-sans text-[13px] font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">
+              <button class="flex items-center gap-1 font-sans text-[12px] font-medium text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-widest">
                 {{ link.title }}
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
               </button>
@@ -62,13 +62,13 @@
               <div class="absolute top-full left-1/2 -translate-x-1/2 w-[600px] bg-white shadow-2xl border border-zonura-navy/10 rounded-premium p-8 hidden group-hover:flex gap-8 z-50">
                 <div class="flex-1 space-y-4">
                   {% for childlink in link.links %}
-                    <a href="{{ childlink.url }}" class="block font-sans text-sm font-bold text-zonura-navy hover:text-zonura-gold transition-colors">{{ childlink.title }}</a>
+                    <a href="{{ childlink.url }}" class="block font-sans text-sm font-medium text-zonura-navy/80 hover:text-zonura-gold transition-colors">{{ childlink.title }}</a>
                   {% endfor %}
                 </div>
               </div>
             </div>
           {% else %}
-            <a href="{{ link.url }}" class="font-sans text-[13px] font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">{{ link.title }}</a>
+            <a href="{{ link.url }}" class="font-sans text-[12px] font-medium text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-widest">{{ link.title }}</a>
           {% endif %}
         {% endfor %}
       {% else %}

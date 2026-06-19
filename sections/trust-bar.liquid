@@ -1,16 +1,16 @@
-<div class="bg-[#F5F5F5] py-8 md:py-12 border-y border-zonura-navy/5">
+<div class="bg-transparent py-16 md:py-24 luxury-fade-up">
   <div class="max-w-[1600px] mx-auto px-4 md:px-8">
     <div class="grid grid-cols-2 md:grid-cols-{{ section.blocks.size }} gap-6 md:gap-8 divide-x-0 md:divide-x divide-zonura-navy/10">
       
       {% for block in section.blocks %}
-        <div class="flex flex-col items-center text-center px-4" {{ block.shopify_attributes }}>
+        <div class="flex flex-col items-center text-center px-4 luxury-fade-up" style="transition-delay: {{ forloop.index | times: 100 }}ms;" {{ block.shopify_attributes }}>
           {% if block.settings.icon != blank %}
-            <div class="w-8 h-8 text-zonura-navy mb-4 flex items-center justify-center">
+            <div class="w-8 h-8 text-zonura-navy mb-4 flex items-center justify-center opacity-80">
               {{ block.settings.icon }}
             </div>
           {% endif %}
-          <h4 class="font-sans font-bold text-zonura-navy text-sm uppercase tracking-wide mb-1">{{ block.settings.title }}</h4>
-          <p class="font-serif text-zonura-navy/60 text-sm">{{ block.settings.text }}</p>
+          <h4 class="font-sans font-medium text-zonura-navy text-xs uppercase tracking-widest mb-2">{{ block.settings.title }}</h4>
+          <p class="font-sans font-light text-zonura-navy/60 text-sm">{{ block.settings.text }}</p>
         </div>
       {% endfor %}
 

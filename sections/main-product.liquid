@@ -1,4 +1,4 @@
-<div class="w-full max-w-[1600px] mx-auto px-4 md:px-8 py-6 md:py-10">
+<div class="w-full max-w-[1600px] mx-auto px-4 md:px-8 py-16 md:py-32">
   <!-- Breadcrumbs -->
   <nav class="flex items-center gap-2 font-sans text-xs text-zonura-navy/60 mb-6">
     <a href="{{ routes.root_url }}" class="hover:text-zonura-gold transition-colors">Home</a>
@@ -39,7 +39,7 @@
       {% for block in section.blocks %}
         {% case block.type %}
           {% when 'title' %}
-            <h1 class="font-serif text-3xl lg:text-4xl text-zonura-navy leading-tight mb-2" {{ block.shopify_attributes }}>
+            <h1 class="font-serif text-4xl lg:text-6xl text-zonura-navy leading-tight mb-2 font-light luxury-fade-up" {{ block.shopify_attributes }}>
               {{ product.title }}
             </h1>
           {% when 'rating' %}
@@ -49,7 +49,7 @@
           {% when 'separator' %}
             <div class="h-[1px] w-full bg-zonura-navy/10 mb-6" {{ block.shopify_attributes }}></div>
           {% when 'description' %}
-            <div class="font-sans text-sm text-zonura-navy/80 leading-relaxed font-light mb-8 prose max-w-none" {{ block.shopify_attributes }}>
+            <div class="font-sans text-sm text-zonura-navy/80 leading-relaxed font-light mb-8 prose max-w-none luxury-fade-up luxury-delay-100" {{ block.shopify_attributes }}>
               {{ product.description }}
             </div>
         {% endcase %}
@@ -58,10 +58,10 @@
 
     <!-- Column 3: The Buy Box Card (col-span-3) -->
     <div class="lg:col-span-3">
-      <div class="sticky top-40 border border-zonura-navy/10 rounded-[14px] p-6 shadow-xl shadow-zonura-navy/5 bg-white flex flex-col gap-5">
+      <div class="sticky top-40 flex flex-col gap-6 luxury-fade-up luxury-delay-200">
         
         <div class="flex flex-col">
-          <span class="font-serif text-3xl font-bold text-zonura-navy mb-1">
+          <span class="font-serif text-4xl font-medium text-zonura-navy mb-1">
             {{ product.price | money }}
           </span>
           {% if product.compare_at_price > product.price %}
@@ -69,21 +69,21 @@
               {{ product.compare_at_price | money }}
             </span>
           {% endif %}
-          <p class="font-sans text-xs text-green-700 font-bold mt-1">inclusive of all taxes</p>
+          <p class="font-sans text-xs text-zonura-navy/50 font-medium mt-1">inclusive of all taxes</p>
         </div>
 
         <div>
           {% if product.available %}
-            <span class="inline-flex items-center gap-1.5 text-sm font-bold text-green-700 font-sans">
+            <span class="inline-flex items-center gap-1.5 text-sm font-medium text-zonura-navy/80 font-sans">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
               In Stock
             </span>
             {% assign inventory = product.variants.first.inventory_quantity %}
             {% if inventory > 0 and inventory < 10 %}
-              <p class="font-sans text-xs font-bold text-red-600 mt-1">Only {{ inventory }} left in stock — order soon!</p>
+              <p class="font-sans text-xs font-medium text-zonura-navy/60 mt-1">Only {{ inventory }} left in stock — order soon!</p>
             {% endif %}
           {% else %}
-            <span class="inline-flex items-center gap-1.5 text-sm font-bold text-red-600 font-sans">
+            <span class="inline-flex items-center gap-1.5 text-sm font-medium text-zonura-navy/60 font-sans">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
               Sold Out
             </span>
@@ -91,12 +91,12 @@
           
           {% if section.settings.show_urgency_signals %}
             <!-- Urgency Signals -->
-            <div class="mt-4 bg-zonura-sand/20 rounded-[10px] p-3 border border-zonura-navy/5 flex flex-col gap-2">
-              <div class="flex items-center gap-2 font-sans text-xs font-bold text-red-600">
+            <div class="mt-4 flex flex-col gap-2">
+              <div class="flex items-center gap-2 font-sans text-xs font-medium text-zonura-navy/80">
                 <span>🔥</span> <span id="viewer-count">...</span> people are viewing this right now
               </div>
               <div class="flex items-center gap-2 font-sans text-xs text-zonura-navy/80">
-                <span>⚡</span> Order in next <span id="delivery-countdown" class="font-bold">...</span> for delivery by <span id="delivery-date" class="font-bold">...</span>
+                <span>⚡</span> Order in next <span id="delivery-countdown" class="font-medium">...</span> for delivery by <span id="delivery-date" class="font-medium">...</span>
               </div>
             </div>
           {% endif %}
@@ -108,7 +108,7 @@
         {% form 'product', product, class: 'flex flex-col gap-3', id: 'main-atc-form' %}
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
           
-          <button type="submit" name="add" id="main-atc-button" class="w-full py-3.5 flex items-center justify-center gap-2 rounded-[14px] bg-zonura-navy hover:bg-zonura-navy/90 text-white font-bold font-sans text-sm tracking-wide transition-colors shadow-lg shadow-zonura-navy/20 {% unless product.available %}opacity-50 cursor-not-allowed{% endunless %}" {% unless product.available %}disabled{% endunless %}>
+          <button type="submit" name="add" id="main-atc-button" class="w-full py-4 flex items-center justify-center gap-2 rounded-full bg-zonura-navy hover:bg-zonura-gold hover:text-zonura-navy text-white font-medium font-sans text-sm tracking-widest transition-colors {% unless product.available %}opacity-50 cursor-not-allowed{% endunless %}" {% unless product.available %}disabled{% endunless %}>
             {% if product.available %}Add to Cart{% else %}Out of Stock{% endif %}
           </button>
           
@@ -123,7 +123,7 @@
           {% endif %}
         {% endform %}
         
-        <button type="button" class="wishlist-btn w-full py-3 flex items-center justify-center gap-2 rounded-[14px] border border-zonura-navy/10 text-zonura-navy font-bold font-sans text-sm tracking-wide hover:bg-zonura-sand transition-colors">
+        <button type="button" class="wishlist-btn w-full py-3 flex items-center justify-center gap-2 text-zonura-navy/60 hover:text-zonura-navy font-medium font-sans text-sm tracking-wide transition-colors border-b border-transparent hover:border-zonura-navy/20 self-start mt-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
           Add to Wishlist
         </button>

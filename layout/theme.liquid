@@ -29,7 +29,9 @@
       </script>
     {% endif %}
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS (CDN for instant Shopify compatibility) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -45,8 +47,8 @@
               }
             },
             fontFamily: {
-              sans: ["Inter", "sans-serif"],
-              serif: ["Playfair Display", "serif"]
+              sans: ["Montserrat", "sans-serif"],
+              serif: ["Cormorant Garamond", "serif"]
             },
             borderRadius: {
               premium: "14px"
@@ -68,7 +70,37 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
+      /* Luxury Motion Classes */
+      .luxury-fade-up {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .luxury-fade-up.in-view {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .luxury-delay-100 { transition-delay: 100ms; }
+      .luxury-delay-200 { transition-delay: 200ms; }
+      .luxury-delay-300 { transition-delay: 300ms; }
     </style>
+    
+    <script>
+      // Global observer for luxury animations
+      document.addEventListener('DOMContentLoaded', () => {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+              // Optional: stop observing once animated to keep it visible
+              // observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.luxury-fade-up').forEach(el => observer.observe(el));
+      });
+    </script>
   </head>
   <body class="antialiased min-h-screen flex flex-col font-sans relative">
     {% section 'announcement-bar' %}
