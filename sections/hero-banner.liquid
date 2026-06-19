@@ -25,7 +25,7 @@
             <h2 class="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-4 leading-tight drop-shadow-md">{{ block.settings.heading }}</h2>
             <p class="font-sans text-base md:text-xl text-white/90 max-w-xl mb-8 md:mb-10 font-light leading-relaxed drop-shadow-md">{{ block.settings.subheading }}</p>
             {% if block.settings.button_text != blank %}
-              <a href="{{ block.settings.button_link | default: '/collections/all' }}" class="inline-block bg-zonura-gold text-zonura-navy px-6 py-2.5 rounded-[10px] font-sans font-bold text-xs tracking-wider hover:bg-white transition-colors text-center w-full md:w-auto shadow-xl">
+              <a href="{{ block.settings.button_link | default: '/collections/all' }}" class="inline-block bg-zonura-gold text-zonura-navy px-8 py-3 rounded-[10px] font-sans font-bold text-sm tracking-wider hover:bg-white transition-colors text-center w-max shadow-xl self-center md:self-start">
                 {{ block.settings.button_text }}
               </a>
             {% endif %}
@@ -42,7 +42,7 @@
         <div class="absolute inset-0 flex flex-col justify-end md:justify-center p-6 md:p-16 max-w-[1600px] mx-auto text-center md:text-left">
           <h2 class="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-4 leading-tight drop-shadow-md">Elevate Every Day</h2>
           <p class="font-sans text-base md:text-xl text-white/90 max-w-xl mb-8 md:mb-10 font-light leading-relaxed drop-shadow-md">Wellness tools for the modern lifestyle</p>
-          <a href="/collections/all" class="inline-block bg-zonura-gold text-zonura-navy px-6 py-2.5 rounded-[10px] font-sans font-bold text-xs tracking-wider hover:bg-white transition-colors text-center w-full md:w-auto shadow-xl">
+          <a href="/collections/all" class="inline-block bg-zonura-gold text-zonura-navy px-8 py-3 rounded-[10px] font-sans font-bold text-sm tracking-wider hover:bg-white transition-colors text-center w-max shadow-xl self-center md:self-start">
             Shop Now
           </a>
         </div>
