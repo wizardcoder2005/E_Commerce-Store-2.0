@@ -1,12 +1,12 @@
-<footer class="bg-zonura-navy text-zonura-sand pt-16 pb-8 border-t border-zonura-navy/10">
+<footer class="bg-zonura-navy text-zonura-sand pt-24 md:pt-32 pb-12">
   <div class="max-w-[1600px] mx-auto px-4 md:px-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ section.blocks.size }} gap-12 mb-16">
       
       {% for block in section.blocks %}
-        <div class="flex flex-col gap-4" {{ block.shopify_attributes }}>
+        <div class="flex flex-col gap-4 luxury-fade-up" style="transition-delay: {{ forloop.index | times: 100 }}ms;" {{ block.shopify_attributes }}>
           {% case block.type %}
             {% when 'text' %}
-              <h3 class="font-sans font-bold text-sm text-zonura-sand uppercase tracking-widest mb-2">{{ block.settings.heading }}</h3>
+              <h3 class="font-sans font-medium text-xs text-zonura-sand/80 uppercase tracking-widest mb-4">{{ block.settings.heading }}</h3>
               <div class="font-sans text-sm text-zonura-sand/60 max-w-xs leading-relaxed prose prose-invert">
                 {{ block.settings.text }}
               </div>
@@ -25,7 +25,7 @@
               {% endif %}
             
             {% when 'link_list' %}
-              <h3 class="font-sans font-bold text-sm text-zonura-sand uppercase tracking-widest mb-2">{{ block.settings.heading }}</h3>
+              <h3 class="font-sans font-medium text-xs text-zonura-sand/80 uppercase tracking-widest mb-4">{{ block.settings.heading }}</h3>
               {% assign footer_menu = linklists[block.settings.menu] %}
               {% if footer_menu.links.size > 0 %}
                 {% for link in footer_menu.links %}
