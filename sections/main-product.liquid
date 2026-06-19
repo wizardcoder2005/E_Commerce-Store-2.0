@@ -12,13 +12,22 @@
     
     <!-- Column 1: Asset Gallery (col-span-4) -->
     <div class="lg:col-span-4 flex flex-col gap-4">
-      <div class="relative w-full aspect-[4/5] bg-zonura-sand/20 rounded-[14px] overflow-hidden border border-zonura-navy/5">
-        <img src="{{ product.featured_image | img_url: '1000x' }}" alt="{{ product.featured_image.alt | escape | default: product.title | escape }}" class="w-full h-full object-cover" />
+      <!-- Main Scrollable Gallery -->
+      <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 w-full hide-scrollbar">
+        {% for image in product.images %}
+          <div class="relative w-full shrink-0 snap-center aspect-[4/5] bg-zonura-sand/20 rounded-[14px] overflow-hidden border border-zonura-navy/5">
+            <img src="{{ image.src | img_url: '1000x' }}" alt="{{ image.alt | escape | default: product.title | escape }}" class="w-full h-full object-cover" />
+          </div>
+        {% else %}
+          <div class="relative w-full shrink-0 snap-center aspect-[4/5] bg-zonura-sand/20 rounded-[14px] overflow-hidden border border-zonura-navy/5 flex items-center justify-center">
+            {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover text-zonura-navy/10' }}
+          </div>
+        {% endfor %}
       </div>
-      <!-- Thumbnails -->
-      <div class="grid grid-cols-4 gap-4">
-        {% for image in product.images offset: 1 limit: 4 %}
-          <div class="relative aspect-square bg-zonura-sand/20 rounded-[14px] overflow-hidden border border-zonura-navy/5 cursor-pointer hover:border-zonura-gold transition-colors">
+      <!-- Thumbnails (Hidden on mobile, scrollable on desktop) -->
+      <div class="hidden md:flex overflow-x-auto gap-4 pb-2 hide-scrollbar w-full">
+        {% for image in product.images %}
+          <div class="relative w-20 h-20 shrink-0 bg-zonura-sand/20 rounded-[14px] overflow-hidden border border-zonura-navy/5 cursor-pointer hover:border-zonura-gold transition-colors" onclick="document.querySelector('.snap-x').scrollTo({left: {{ forloop.index0 }} * document.querySelector('.snap-x').clientWidth, behavior: 'smooth'})">
             <img src="{{ image.src | img_url: '400x' }}" alt="{{ image.alt | escape | default: product.title | escape }}" class="w-full h-full object-cover" />
           </div>
         {% endfor %}
@@ -27,22 +36,24 @@
 
     <!-- Column 2: Information Feed (col-span-5) -->
     <div class="lg:col-span-5 flex flex-col">
-      <h1 class="font-serif text-3xl lg:text-4xl text-zonura-navy leading-tight mb-2">
-        {{ product.title }}
-      </h1>
-      
-      <!-- Judge.me Rating Badge -->
-      <div class="mb-4">
-        {% render 'judgeme_widgets', widget_type: 'judgeme_preview_badge', jm_style: '', concierge_install: true, product: product %}
-      </div>
-
-      <div class="h-[1px] w-full bg-zonura-navy/10 mb-6"></div>
-
-      <div class="font-sans text-sm text-zonura-navy/80 leading-relaxed font-light mb-8 prose max-w-none">
-        {{ product.description }}
-      </div>
-
-      <!-- Tab System Removed until content is ready -->
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'title' %}
+            <h1 class="font-serif text-3xl lg:text-4xl text-zonura-navy leading-tight mb-2" {{ block.shopify_attributes }}>
+              {{ product.title }}
+            </h1>
+          {% when 'rating' %}
+            <div class="mb-4" {{ block.shopify_attributes }}>
+              {% render 'judgeme_widgets', widget_type: 'judgeme_preview_badge', jm_style: '', concierge_install: true, product: product %}
+            </div>
+          {% when 'separator' %}
+            <div class="h-[1px] w-full bg-zonura-navy/10 mb-6" {{ block.shopify_attributes }}></div>
+          {% when 'description' %}
+            <div class="font-sans text-sm text-zonura-navy/80 leading-relaxed font-light mb-8 prose max-w-none" {{ block.shopify_attributes }}>
+              {{ product.description }}
+            </div>
+        {% endcase %}
+      {% endfor %}
     </div>
 
     <!-- Column 3: The Buy Box Card (col-span-3) -->
@@ -78,15 +89,17 @@
             </span>
           {% endif %}
           
-          <!-- Urgency Signals -->
-          <div class="mt-4 bg-zonura-sand/20 rounded-[10px] p-3 border border-zonura-navy/5 flex flex-col gap-2">
-            <div class="flex items-center gap-2 font-sans text-xs font-bold text-red-600">
-              <span>🔥</span> <span id="viewer-count">...</span> people are viewing this right now
+          {% if section.settings.show_urgency_signals %}
+            <!-- Urgency Signals -->
+            <div class="mt-4 bg-zonura-sand/20 rounded-[10px] p-3 border border-zonura-navy/5 flex flex-col gap-2">
+              <div class="flex items-center gap-2 font-sans text-xs font-bold text-red-600">
+                <span>🔥</span> <span id="viewer-count">...</span> people are viewing this right now
+              </div>
+              <div class="flex items-center gap-2 font-sans text-xs text-zonura-navy/80">
+                <span>⚡</span> Order in next <span id="delivery-countdown" class="font-bold">...</span> for delivery by <span id="delivery-date" class="font-bold">...</span>
+              </div>
             </div>
-            <div class="flex items-center gap-2 font-sans text-xs text-zonura-navy/80">
-              <span>⚡</span> Order in next <span id="delivery-countdown" class="font-bold">...</span> for delivery by <span id="delivery-date" class="font-bold">...</span>
-            </div>
-          </div>
+          {% endif %}
           
           <p class="font-sans text-xs text-zonura-navy/50 mt-4 mb-2">Ships directly from ZONURA warehouses. Secure transaction.</p>
         </div>
@@ -140,6 +153,50 @@
 {% schema %}
 {
   "name": "Product Layout",
-  "presets": [{"name": "Main Product"}]
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_urgency_signals",
+      "label": "Show Urgency Signals",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "rating",
+      "name": "Product Rating",
+      "limit": 1
+    },
+    {
+      "type": "separator",
+      "name": "Separator"
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "title"
+      },
+      {
+        "type": "rating"
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "type": "description"
+      }
+    ]
+  }
 }
 {% endschema %}

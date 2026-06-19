@@ -4,17 +4,17 @@
       <div class="flex items-center gap-4">
         <h2 class="font-serif text-3xl md:text-4xl text-zonura-navy">{{ section.settings.heading }}</h2>
         <div class="bg-red-600 text-white font-sans text-sm font-bold tracking-widest px-4 py-1.5 rounded-full flex items-center gap-2">
-          ⚡ Ends in <span id="deal-timer" class="tabular-nums">23:59:59</span>
+          ⚡ Ends in <span id="deal-timer-{{ section.id }}" class="tabular-nums">23:59:59</span>
         </div>
       </div>
-      <a href="{{ collections['deals'].url | default: '/collections/all' }}" class="font-sans text-sm font-bold text-zonura-gold hover:text-zonura-navy transition-colors underline decoration-zonura-gold/30 underline-offset-4">VIEW ALL DEALS</a>
+      {% assign target_collection = collections[section.settings.collection] %}
+      <a href="{{ target_collection.url | default: '/collections/all' }}" class="font-sans text-sm font-bold text-zonura-gold hover:text-zonura-navy transition-colors underline decoration-zonura-gold/30 underline-offset-4">VIEW ALL DEALS</a>
     </div>
 
     <!-- Horizontal Scroll Container -->
     <div class="flex gap-6 overflow-x-auto hide-scrollbar pb-6 snap-x snap-mandatory">
-      {% assign deals_collection = collections['deals'] %}
-      {% if deals_collection != blank and deals_collection.products.size > 0 %}
-        {% for product in deals_collection.products limit: 10 %}
+      {% if target_collection != blank and target_collection.products.size > 0 %}
+        {% for product in target_collection.products limit: 10 %}
           <div class="snap-start shrink-0 w-[280px] md:w-[320px]">
             {% render 'product-card', product: product %}
           </div>
@@ -40,17 +40,17 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const timerElement = document.getElementById('deal-timer');
+    const timerElement = document.getElementById('deal-timer-{{ section.id }}');
     if (!timerElement) return;
 
     // Reset anchor in localStorage
     const now = new Date().getTime();
-    let resetTime = localStorage.getItem('zonura_deals_reset');
+    let resetTime = localStorage.getItem('zonura_deals_reset_{{ section.id }}');
     
     // If no reset time or it's in the past, set it to 24h from now
     if (!resetTime || now > parseInt(resetTime)) {
       resetTime = now + (24 * 60 * 60 * 1000); // 24 hours
-      localStorage.setItem('zonura_deals_reset', resetTime);
+      localStorage.setItem('zonura_deals_reset_{{ section.id }}', resetTime);
     }
 
     function updateTimer() {
@@ -60,7 +60,7 @@
       if (distance < 0) {
         // Reset again
         resetTime = currentTime + (24 * 60 * 60 * 1000);
-        localStorage.setItem('zonura_deals_reset', resetTime);
+        localStorage.setItem('zonura_deals_reset_{{ section.id }}', resetTime);
         return;
       }
 
@@ -88,6 +88,11 @@
       "id": "heading",
       "label": "Heading",
       "default": "Today's Deals"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Deals Collection"
     }
   ],
   "presets": [{"name": "Today's Deals"}]

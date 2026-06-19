@@ -1,20 +1,33 @@
 <div class="flex flex-col sticky top-0 z-50 shadow-sm relative">
   <!-- Utility Bar (top, small) -->
-  <div class="bg-zonura-navy text-white px-4 py-1.5 flex justify-between items-center text-xs font-sans">
-    <div class="flex items-center gap-4">
-      <span class="flex items-center gap-1 opacity-90">
-        <!-- India Flag Emoji/Icon -->
-        🇮🇳 Deliver to India
-      </span>
-      <span class="hidden md:block opacity-90">|</span>
-      <span class="hidden md:block opacity-90 font-bold text-zonura-gold">Free Shipping above Rs.499</span>
+  {% if section.settings.show_utility_bar %}
+    <div class="bg-zonura-navy text-white px-4 py-1.5 flex justify-between items-center text-xs font-sans">
+      <div class="flex items-center gap-4">
+        {% if section.settings.utility_text_1 != blank %}
+          <span class="flex items-center gap-1 opacity-90">
+            {{ section.settings.utility_text_1 }}
+          </span>
+        {% endif %}
+        {% if section.settings.utility_text_1 != blank and section.settings.utility_text_2 != blank %}
+          <span class="hidden md:block opacity-90">|</span>
+        {% endif %}
+        {% if section.settings.utility_text_2 != blank %}
+          <span class="hidden md:block opacity-90 font-bold text-zonura-gold">{{ section.settings.utility_text_2 }}</span>
+        {% endif %}
+      </div>
+      <div class="flex items-center gap-4 md:gap-6 opacity-90">
+        {% if section.settings.utility_link_1_text != blank %}
+          <a href="{{ section.settings.utility_link_1_url }}" class="hover:text-zonura-gold transition-colors">{{ section.settings.utility_link_1_text }}</a>
+        {% endif %}
+        {% if section.settings.utility_link_1_text != blank and section.settings.utility_link_2_text != blank %}
+          <span class="opacity-50">|</span>
+        {% endif %}
+        {% if section.settings.utility_link_2_text != blank %}
+          <a href="{{ section.settings.utility_link_2_url }}" class="hover:text-zonura-gold transition-colors">{{ section.settings.utility_link_2_text }}</a>
+        {% endif %}
+      </div>
     </div>
-    <div class="flex items-center gap-4 md:gap-6 opacity-90">
-      <a href="/pages/track" class="hover:text-zonura-gold transition-colors">Track Order</a>
-      <span class="opacity-50">|</span>
-      <a href="/pages/contact" class="hover:text-zonura-gold transition-colors">Customer Care</a>
-    </div>
-  </div>
+  {% endif %}
 
   <!-- Main Navigation -->
   <div class="bg-white px-4 lg:px-8 py-4 flex items-center justify-between border-b border-zonura-navy/5">
@@ -27,40 +40,40 @@
     <!-- Logo -->
     <a href="{{ routes.root_url }}" class="flex items-center shrink-0">
       {% if section.settings.logo != blank %}
-        <img src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ shop.name }}" class="h-8 md:h-10 object-contain" />
+        <img src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}" alt="{{ shop.name }}" style="max-width: {{ section.settings.logo_width }}px; height: auto;" class="object-contain transition-all" />
       {% else %}
-        <span class="font-serif text-3xl font-bold tracking-tight text-zonura-navy">{{ shop.name }}</span>
+        <span class="font-serif text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-zonura-navy">{{ shop.name }}</span>
       {% endif %}
     </a>
 
     <!-- Desktop Nav Links -->
     <nav class="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
-      <a href="/" class="font-sans text-[13px] font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">Home</a>
-      
-      <!-- Shop Mega Dropdown Trigger -->
-      <div class="group relative py-4">
-        <button class="flex items-center gap-1 font-sans text-[13px] font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">
-          Shop
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-        </button>
-        <!-- Mega Dropdown Menu -->
-        <div class="absolute top-full left-1/2 -translate-x-1/2 w-[600px] bg-white shadow-2xl border border-zonura-navy/10 rounded-premium p-8 hidden group-hover:flex gap-8 z-50">
-          <div class="flex-1 space-y-4">
-            <a href="/collections/wellness" class="block font-sans text-sm font-bold text-zonura-navy hover:text-zonura-gold transition-colors">Wellness & Self-Care</a>
-            <a href="/collections/fitness" class="block font-sans text-sm font-bold text-zonura-navy hover:text-zonura-gold transition-colors">Fitness & Sports</a>
-            <a href="/collections/gadgets" class="block font-sans text-sm font-bold text-zonura-navy hover:text-zonura-gold transition-colors">Gadgets & Accessories</a>
-          </div>
-          <div class="flex-1 space-y-4 border-l border-zonura-navy/10 pl-8">
-            <a href="/collections/home" class="block font-sans text-sm font-bold text-zonura-navy hover:text-zonura-gold transition-colors">Home & Living</a>
-            <a href="/collections/grooming" class="block font-sans text-sm font-bold text-zonura-navy hover:text-zonura-gold transition-colors">Grooming</a>
-            <a href="/collections/all" class="block font-sans text-sm font-bold text-zonura-gold hover:text-zonura-navy transition-colors mt-4">View All &rarr;</a>
-          </div>
-        </div>
-      </div>
-
-      <a href="/collections/wellness" class="font-sans text-[13px] font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">Wellness</a>
-      <a href="/collections/deals" class="font-sans text-[13px] font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">Deals</a>
-      <a href="/pages/about-us" class="font-sans text-[13px] font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">About Us</a>
+      {% assign main_menu = linklists[section.settings.menu] %}
+      {% if main_menu.links.size > 0 %}
+        {% for link in main_menu.links %}
+          {% if link.links.size > 0 %}
+            <!-- Dropdown Trigger -->
+            <div class="group relative py-4">
+              <button class="flex items-center gap-1 font-sans text-[13px] font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">
+                {{ link.title }}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              <!-- Dropdown Menu -->
+              <div class="absolute top-full left-1/2 -translate-x-1/2 w-[600px] bg-white shadow-2xl border border-zonura-navy/10 rounded-premium p-8 hidden group-hover:flex gap-8 z-50">
+                <div class="flex-1 space-y-4">
+                  {% for childlink in link.links %}
+                    <a href="{{ childlink.url }}" class="block font-sans text-sm font-bold text-zonura-navy hover:text-zonura-gold transition-colors">{{ childlink.title }}</a>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <a href="{{ link.url }}" class="font-sans text-[13px] font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">{{ link.title }}</a>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <span class="font-sans text-[13px] text-zonura-navy/60">Select a menu in theme settings</span>
+      {% endif %}
     </nav>
 
     <!-- Icons: Search, Account, Cart -->
@@ -105,23 +118,22 @@
   </div>
   
   <nav class="flex flex-col p-6 gap-6 overflow-y-auto flex-1">
-    <a href="/" class="font-sans text-lg font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">Home</a>
-    
-    <div class="border-b border-zonura-navy/10 pb-4">
-      <span class="font-sans text-lg font-bold text-zonura-navy uppercase tracking-wide mb-4 block">Shop</span>
-      <div class="flex flex-col gap-3 pl-4">
-        <a href="/collections/wellness" class="font-sans text-sm font-semibold text-zonura-navy/80 hover:text-zonura-gold transition-colors">Wellness & Self-Care</a>
-        <a href="/collections/fitness" class="font-sans text-sm font-semibold text-zonura-navy/80 hover:text-zonura-gold transition-colors">Fitness & Sports</a>
-        <a href="/collections/gadgets" class="font-sans text-sm font-semibold text-zonura-navy/80 hover:text-zonura-gold transition-colors">Gadgets & Accessories</a>
-        <a href="/collections/home" class="font-sans text-sm font-semibold text-zonura-navy/80 hover:text-zonura-gold transition-colors">Home & Living</a>
-        <a href="/collections/grooming" class="font-sans text-sm font-semibold text-zonura-navy/80 hover:text-zonura-gold transition-colors">Grooming</a>
-        <a href="/collections/all" class="font-sans text-sm font-bold text-zonura-gold transition-colors mt-2">View All &rarr;</a>
-      </div>
-    </div>
-
-    <a href="/collections/wellness" class="font-sans text-lg font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">Wellness</a>
-    <a href="/collections/deals" class="font-sans text-lg font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">Deals</a>
-    <a href="/pages/about-us" class="font-sans text-lg font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">About Us</a>
+    {% if main_menu.links.size > 0 %}
+      {% for link in main_menu.links %}
+        {% if link.links.size > 0 %}
+          <div class="border-b border-zonura-navy/10 pb-4">
+            <span class="font-sans text-lg font-bold text-zonura-navy uppercase tracking-wide mb-4 block">{{ link.title }}</span>
+            <div class="flex flex-col gap-3 pl-4">
+              {% for childlink in link.links %}
+                <a href="{{ childlink.url }}" class="font-sans text-sm font-semibold text-zonura-navy/80 hover:text-zonura-gold transition-colors">{{ childlink.title }}</a>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <a href="{{ link.url }}" class="font-sans text-lg font-bold text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-wide">{{ link.title }}</a>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
   </nav>
 
   <div class="mt-auto p-6 border-t border-zonura-navy/10 bg-zonura-sand/20">
@@ -140,6 +152,66 @@
       "type": "image_picker",
       "id": "logo",
       "label": "Logo Image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "default": 150,
+      "unit": "px",
+      "label": "Custom logo width"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Main Navigation Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Utility Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_utility_bar",
+      "label": "Show Utility Bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "utility_text_1",
+      "label": "Utility Text 1",
+      "default": "🇮🇳 Deliver to India"
+    },
+    {
+      "type": "text",
+      "id": "utility_text_2",
+      "label": "Utility Text 2",
+      "default": "Free Shipping above Rs.499"
+    },
+    {
+      "type": "text",
+      "id": "utility_link_1_text",
+      "label": "Link 1 Text",
+      "default": "Track Order"
+    },
+    {
+      "type": "url",
+      "id": "utility_link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "utility_link_2_text",
+      "label": "Link 2 Text",
+      "default": "Customer Care"
+    },
+    {
+      "type": "url",
+      "id": "utility_link_2_url",
+      "label": "Link 2 URL"
     }
   ]
 }

@@ -96,8 +96,8 @@
             {% endfor %}
           </div>
         {% else %}
-          <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-            {% paginate search.results by 16 %}
+          <div class="grid grid-cols-2 {% if section.settings.columns_desktop == '3' %}lg:grid-cols-3{% else %}lg:grid-cols-4{% endif %} gap-4 md:gap-6">
+            {% paginate search.results by section.settings.products_per_page %}
               {% for item in search.results %}
                 {% if item.object_type == 'product' %}
                   {% render 'product-card', product: item %}
@@ -123,6 +123,33 @@
 {% schema %}
 {
   "name": "Search Results",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "label": "Products per page",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Number of columns on desktop",
+      "options": [
+        {
+          "value": "3",
+          "label": "3 columns"
+        },
+        {
+          "value": "4",
+          "label": "4 columns"
+        }
+      ],
+      "default": "4"
+    }
+  ],
   "presets": [{"name": "Search Results"}]
 }
 {% endschema %}

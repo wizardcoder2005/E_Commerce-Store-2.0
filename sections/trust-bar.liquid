@@ -1,34 +1,18 @@
 <div class="bg-[#F5F5F5] py-8 md:py-12 border-y border-zonura-navy/5">
   <div class="max-w-[1600px] mx-auto px-4 md:px-8">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 divide-x-0 md:divide-x divide-zonura-navy/10">
+    <div class="grid grid-cols-2 md:grid-cols-{{ section.blocks.size }} gap-6 md:gap-8 divide-x-0 md:divide-x divide-zonura-navy/10">
       
-      <!-- Trust Item 1 -->
-      <div class="flex flex-col items-center text-center px-4">
-        <svg class="w-8 h-8 text-zonura-navy mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 21a2 2 0 110-4 2 2 0 010 4zm10 0a2 2 0 110-4 2 2 0 010 4z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11h4l3 3v2h-7v-5z" /></svg>
-        <h4 class="font-sans font-bold text-zonura-navy text-sm uppercase tracking-wide mb-1">Fast Delivery</h4>
-        <p class="font-serif text-zonura-navy/60 text-sm">Ships in 2–5 days</p>
-      </div>
-
-      <!-- Trust Item 2 -->
-      <div class="flex flex-col items-center text-center px-4">
-        <svg class="w-8 h-8 text-zonura-navy mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-        <h4 class="font-sans font-bold text-zonura-navy text-sm uppercase tracking-wide mb-1">Easy Returns</h4>
-        <p class="font-serif text-zonura-navy/60 text-sm">30-day return policy</p>
-      </div>
-
-      <!-- Trust Item 3 -->
-      <div class="flex flex-col items-center text-center px-4">
-        <svg class="w-8 h-8 text-zonura-navy mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-        <h4 class="font-sans font-bold text-zonura-navy text-sm uppercase tracking-wide mb-1">Secure Payment</h4>
-        <p class="font-serif text-zonura-navy/60 text-sm">UPI, Cards, COD</p>
-      </div>
-
-      <!-- Trust Item 4 -->
-      <div class="flex flex-col items-center text-center px-4">
-        <svg class="w-8 h-8 text-zonura-navy mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
-        <h4 class="font-sans font-bold text-zonura-navy text-sm uppercase tracking-wide mb-1">10,000+ Happy Customers</h4>
-        <p class="font-serif text-zonura-navy/60 text-sm">Across India</p>
-      </div>
+      {% for block in section.blocks %}
+        <div class="flex flex-col items-center text-center px-4" {{ block.shopify_attributes }}>
+          {% if block.settings.icon != blank %}
+            <div class="w-8 h-8 text-zonura-navy mb-4 flex items-center justify-center">
+              {{ block.settings.icon }}
+            </div>
+          {% endif %}
+          <h4 class="font-sans font-bold text-zonura-navy text-sm uppercase tracking-wide mb-1">{{ block.settings.title }}</h4>
+          <p class="font-serif text-zonura-navy/60 text-sm">{{ block.settings.text }}</p>
+        </div>
+      {% endfor %}
 
     </div>
   </div>
@@ -37,7 +21,69 @@
 {% schema %}
 {
   "name": "Trust Bar",
+  "max_blocks": 4,
   "settings": [],
-  "presets": [{"name": "Trust Bar"}]
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Trust Item",
+      "settings": [
+        {
+          "type": "html",
+          "id": "icon",
+          "label": "SVG Icon Code",
+          "info": "Paste SVG code here"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Fast Delivery"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Ships in 2-5 days"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "trust_item",
+        "settings": {
+          "title": "Fast Delivery",
+          "text": "Ships in 2-5 days",
+          "icon": "<svg class=\"w-8 h-8 text-zonura-navy\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z\" /><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M8 21a2 2 0 110-4 2 2 0 010 4zm10 0a2 2 0 110-4 2 2 0 010 4z\" /><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M16 11h4l3 3v2h-7v-5z\" /></svg>"
+        }
+      },
+      {
+        "type": "trust_item",
+        "settings": {
+          "title": "Easy Returns",
+          "text": "30-day return policy",
+          "icon": "<svg class=\"w-8 h-8 text-zonura-navy\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15\" /></svg>"
+        }
+      },
+      {
+        "type": "trust_item",
+        "settings": {
+          "title": "Secure Payment",
+          "text": "UPI, Cards, COD",
+          "icon": "<svg class=\"w-8 h-8 text-zonura-navy\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z\" /></svg>"
+        }
+      },
+      {
+        "type": "trust_item",
+        "settings": {
+          "title": "10,000+ Happy Customers",
+          "text": "Across India",
+          "icon": "<svg class=\"w-8 h-8 text-zonura-navy\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z\" /></svg>"
+        }
+      }
+    ]
+  }
 }
 {% endschema %}

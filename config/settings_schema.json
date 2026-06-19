@@ -1,1 +1,56 @@
-[]
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Zonura",
+    "theme_author": "Antigravity",
+    "theme_version": "1.0.0",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary Color (Navy)",
+        "default": "#0E1E2E"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background Color (Sand)",
+        "default": "#F4F1ED"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent Color (Gold)",
+        "default": "#C9A637"
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram link",
+        "info": "https:\/\/instagram.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook link",
+        "info": "https:\/\/facebook.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube link",
+        "info": "https:\/\/youtube.com\/shopify"
+      }
+    ]
+  }
+]

@@ -8,7 +8,9 @@
           {% if block.settings.image != blank %}
             <img src="{{ block.settings.image | img_url: '2000x' }}" alt="{{ block.settings.heading | escape }}" class="absolute inset-0 w-full h-full object-cover {% if block.settings.mobile_image != blank %}hidden md:block{% endif %}" fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}" />
           {% else %}
-            <div class="absolute inset-0 w-full h-full bg-zonura-navy flex items-center justify-center text-white/20">IMAGE</div>
+            <div class="absolute inset-0 w-full h-full bg-zonura-navy flex items-center justify-center text-white/20">
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover opacity-50' }}
+            </div>
           {% endif %}
 
           {% if block.settings.mobile_image != blank %}
@@ -23,7 +25,7 @@
             <h2 class="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-4 leading-tight drop-shadow-md">{{ block.settings.heading }}</h2>
             <p class="font-sans text-base md:text-xl text-white/90 max-w-xl mb-8 md:mb-10 font-light leading-relaxed drop-shadow-md">{{ block.settings.subheading }}</p>
             {% if block.settings.button_text != blank %}
-              <a href="{{ block.settings.button_link | default: '/collections/all' }}" class="inline-block bg-zonura-gold text-zonura-navy px-8 py-4 rounded-[14px] font-sans font-bold text-sm tracking-wide hover:bg-white transition-colors text-center w-full md:w-auto shadow-xl">
+              <a href="{{ block.settings.button_link | default: '/collections/all' }}" class="inline-block bg-zonura-gold text-zonura-navy px-6 py-2.5 rounded-[10px] font-sans font-bold text-xs tracking-wider hover:bg-white transition-colors text-center w-full md:w-auto shadow-xl">
                 {{ block.settings.button_text }}
               </a>
             {% endif %}
@@ -33,12 +35,14 @@
     {% else %}
       <!-- Placeholder slide -->
       <div class="slide w-full h-full shrink-0 relative">
-        <div class="absolute inset-0 bg-zonura-navy"></div>
+        <div class="absolute inset-0 bg-zonura-navy">
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-full object-cover opacity-50' }}
+        </div>
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
         <div class="absolute inset-0 flex flex-col justify-end md:justify-center p-6 md:p-16 max-w-[1600px] mx-auto text-center md:text-left">
           <h2 class="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-4 leading-tight drop-shadow-md">Elevate Every Day</h2>
           <p class="font-sans text-base md:text-xl text-white/90 max-w-xl mb-8 md:mb-10 font-light leading-relaxed drop-shadow-md">Wellness tools for the modern lifestyle</p>
-          <a href="/collections/all" class="inline-block bg-zonura-gold text-zonura-navy px-8 py-4 rounded-[14px] font-sans font-bold text-sm tracking-wide hover:bg-white transition-colors text-center w-full md:w-auto shadow-xl">
+          <a href="/collections/all" class="inline-block bg-zonura-gold text-zonura-navy px-6 py-2.5 rounded-[10px] font-sans font-bold text-xs tracking-wider hover:bg-white transition-colors text-center w-full md:w-auto shadow-xl">
             Shop Now
           </a>
         </div>
