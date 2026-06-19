@@ -13,12 +13,24 @@
       "header": {
         "type": "header",
         "settings": {
-          "logo": "shopify://shop_images/Gemini_Generated_Image_uvp5vouvp5vouvp5-removebg-preview_e56c5a1e-98dc-4af9-b1b4-6fcc8983acb9.png"
+          "logo": "shopify://shop_images/Gemini_Generated_Image_uvp5vouvp5vouvp5-removebg-preview_e56c5a1e-98dc-4af9-b1b4-6fcc8983acb9.png",
+          "logo_width": 50,
+          "menu": "main-menu",
+          "show_utility_bar": true,
+          "utility_text_1": "🇮🇳 Deliver to India",
+          "utility_text_2": "Free Shipping above Rs.499",
+          "utility_link_1_text": "Track Order",
+          "utility_link_1_url": "",
+          "utility_link_2_text": "Customer Care",
+          "utility_link_2_url": ""
         }
       },
       "footer": {
         "type": "footer",
-        "settings": {}
+        "settings": {
+          "show_social": true,
+          "show_payment_icons": true
+        }
       },
       "announcement-bar": {
         "type": "announcement-bar",
