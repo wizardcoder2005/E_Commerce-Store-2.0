@@ -1,100 +1,77 @@
-<div class="py-16 md:py-24 bg-zonura-sand/30 border-y border-zonura-navy/5">
-  <div class="max-w-2xl mx-auto px-4 md:px-8 text-center">
-    <h2 class="font-serif text-3xl md:text-4xl text-zonura-navy mb-4">{{ section.settings.heading }}</h2>
-    <p class="font-sans text-sm md:text-base text-zonura-navy/70 mb-8 max-w-lg mx-auto">{{ section.settings.subheading }}</p>
-
-    <!-- Ajax Newsletter Form -->
-    {% form 'customer', id: 'newsletter-form', class: 'relative w-full max-w-md mx-auto' %}
-      <input type="hidden" name="contact[tags]" value="newsletter">
+<div class="bg-white py-16 md:py-24 border-t border-zonura-navy/5">
+  <div class="max-w-[1600px] mx-auto px-4 md:px-8">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-12 md:gap-24">
       
-      {% if form.posted_successfully? %}
-        <div class="bg-green-50 text-green-700 font-sans text-sm px-6 py-4 rounded-[14px] border border-green-200">
-          Thanks for subscribing! Check your email for your 10% off code.
-        </div>
-      {% else %}
-        <div class="flex relative shadow-lg shadow-zonura-navy/5 rounded-full overflow-hidden">
-          <input type="email" 
-                 name="contact[email]" 
-                 id="Email" 
-                 class="w-full bg-white text-zonura-navy font-sans text-sm px-6 py-4 focus:outline-none focus:ring-2 focus:ring-zonura-gold" 
-                 placeholder="Enter your email address" 
-                 required 
-                 {% if form.errors %}aria-invalid="true"{% endif %}
-          >
-          <button type="submit" name="commit" class="bg-zonura-navy text-white px-8 py-4 font-sans text-sm font-bold tracking-widest uppercase hover:bg-zonura-gold hover:text-zonura-navy transition-colors shrink-0">
-            Subscribe
-          </button>
-        </div>
-        {% if form.errors %}
-          <div class="text-red-500 font-sans text-xs mt-3 text-left pl-6">
-            {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
-          </div>
+      <!-- Left Image -->
+      <div class="w-full md:w-1/2 flex justify-center bg-[#f0f3f2] p-8 rounded-premium luxury-fade-up">
+        {% if section.settings.image != blank %}
+          <img src="{{ section.settings.image | img_url: '800x' }}" alt="Newsletter Image" class="w-full max-w-md object-contain mix-blend-multiply">
+        {% else %}
+          {{ 'image' | placeholder_svg_tag: 'w-full max-w-md h-64 text-zonura-navy/20' }}
         {% endif %}
-      {% endif %}
-    {% endform %}
+      </div>
+
+      <!-- Right Content -->
+      <div class="w-full md:w-1/2 flex flex-col luxury-fade-up luxury-delay-200">
+        <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl text-zonura-navy leading-tight mb-8 max-w-xl">
+          {{ section.settings.heading }}
+        </h2>
+
+        {% form 'customer', class: 'w-full max-w-md relative' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <div class="relative flex items-center border-b border-zonura-navy/20 focus-within:border-zonura-navy transition-colors pb-2">
+            <input 
+              type="email" 
+              name="contact[email]" 
+              id="Email" 
+              class="w-full bg-transparent font-sans text-sm text-zonura-navy placeholder:text-zonura-navy/40 focus:outline-none py-2" 
+              placeholder="{{ section.settings.placeholder }}"
+              required
+            >
+            <button type="submit" class="absolute right-0 top-1/2 -translate-y-1/2 text-zonura-navy hover:text-zonura-gold transition-colors p-2 focus:outline-none">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </button>
+          </div>
+          {% if form.posted_successfully? %}
+            <p class="mt-4 font-sans text-sm text-green-700">Thanks for subscribing!</p>
+          {% endif %}
+          {% if form.errors %}
+            <p class="mt-4 font-sans text-sm text-red-600">{{ form.errors | default_errors }}</p>
+          {% endif %}
+        {% endform %}
+      </div>
+      
+    </div>
   </div>
 </div>
 
-<script>
-  // Advanced AJAX submit logic could go here, but native Shopify Forms
-  // reload the page with a hash/success state. To prevent reload entirely,
-  // we would need a custom app endpoint. For Shopify native, it reloads but scrolls to form.
-  // To truly prevent reload, we intercept and post via fetch:
-  document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('#newsletter-form');
-    if(form) {
-      form.addEventListener('submit', function(e) {
-        // Basic AJAX implementation for Shopify Contact forms
-        e.preventDefault();
-        const formData = new FormData(form);
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerText;
-        submitBtn.innerText = 'WAIT...';
-        submitBtn.disabled = true;
-
-        fetch(window.location.pathname, {
-          method: 'POST',
-          body: formData
-        })
-        .then(res => res.text())
-        .then(html => {
-          // Parse response to find form success state
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, 'text/html');
-          const newForm = doc.querySelector('#newsletter-form');
-          if (newForm) {
-            form.innerHTML = newForm.innerHTML;
-          } else {
-            // Fallback success message
-            form.innerHTML = '<div class="bg-green-50 text-green-700 font-sans text-sm px-6 py-4 rounded-[14px] border border-green-200">Thanks for subscribing! Check your email for your 10% off code.</div>';
-          }
-        })
-        .catch(err => {
-          submitBtn.innerText = originalText;
-          submitBtn.disabled = false;
-        });
-      });
-    }
-  });
-</script>
-
 {% schema %}
 {
-  "name": "Newsletter Signup",
+  "name": "Newsletter Split",
   "settings": [
     {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Get 10% Off Your First Order"
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
     },
     {
       "type": "textarea",
-      "id": "subheading",
-      "label": "Subtext",
-      "default": "Join 10,000+ Zonura members for exclusive deals, wellness tips, and early access."
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join our Newsletter — Get Updates, Offers and Invites."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Input Placeholder",
+      "default": "Email address"
     }
   ],
-  "presets": [{"name": "Newsletter"}]
+  "presets": [
+    {
+      "name": "Newsletter Split",
+      "category": "Promotional"
+    }
+  ]
 }
 {% endschema %}
