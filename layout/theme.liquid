@@ -81,8 +81,8 @@
     
     <style>
       body {
-        background-color: #ffffff;
-        color: #0E1E2E;
+        background-color: {{ settings.color_background | default: '#FAFAFA' }};
+        color: {{ settings.color_primary | default: '#1A1A1A' }};
       }
       .hide-scrollbar::-webkit-scrollbar {
         display: none;

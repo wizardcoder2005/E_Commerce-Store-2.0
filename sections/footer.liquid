@@ -1,4 +1,4 @@
-<footer class="bg-[#F8F9FA] text-zonura-navy pt-20 pb-8 border-t border-zonura-navy/5">
+<footer class="bg-transparent text-zonura-navy pt-20 pb-8 border-t border-zonura-navy/5">
   <div class="max-w-[1600px] mx-auto px-4 md:px-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ section.blocks.size }} gap-12 mb-16">
       
@@ -7,7 +7,8 @@
           {% case block.type %}
             {% when 'link_list' %}
               <h3 class="font-serif text-3xl text-zonura-navy mb-6">{{ block.settings.heading }}</h3>
-              {% assign footer_menu = linklists[block.settings.menu] %}
+              {% assign menu_handle = block.settings.menu | default: 'footer' %}
+              {% assign footer_menu = linklists[menu_handle] %}
               {% if footer_menu.links.size > 0 %}
                 <div class="flex flex-col gap-3">
                   {% for link in footer_menu.links %}
