@@ -1,6 +1,6 @@
 <div class="bg-transparent py-24 md:py-32">
   <div class="max-w-[1600px] mx-auto px-4 md:px-8">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4 luxury-fade-up">
+    <div class="flex flex-col mb-12 gap-4 luxury-fade-up">
       <div class="flex items-center gap-4">
         <h2 class="font-serif text-4xl md:text-5xl text-zonura-navy font-light">{{ section.settings.heading }}</h2>
         <span class="text-zonura-navy/20 hidden md:block text-2xl font-light">|</span>
@@ -8,8 +8,6 @@
           Ends in <span id="deal-timer-{{ section.id }}" class="tabular-nums font-serif text-lg">23:59:59</span>
         </div>
       </div>
-      {% assign target_collection = collections[section.settings.collection] %}
-      <a href="{{ target_collection.url | default: '/collections/all' }}" class="font-sans text-xs font-medium text-zonura-navy/60 hover:text-zonura-gold transition-colors uppercase tracking-widest border-b border-zonura-navy/20 hover:border-zonura-gold pb-1">VIEW ALL</a>
     </div>
 
     <!-- Horizontal Scroll Container -->
@@ -35,6 +33,11 @@
           <div class="w-full py-12 text-center text-zonura-navy/60 font-sans">No deals currently available. Check back soon!</div>
         {% endif %}
       {% endif %}
+    </div>
+
+    <div class="mt-12 flex justify-center luxury-fade-up luxury-delay-300">
+      {% assign target_collection = collections[section.settings.collection] %}
+      <a href="{{ target_collection.url | default: '/collections/all' }}" class="font-sans text-xs font-medium text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-widest border-b border-zonura-navy/20 hover:border-zonura-gold pb-1">VIEW ALL</a>
     </div>
   </div>
 </div>

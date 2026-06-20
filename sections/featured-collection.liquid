@@ -1,12 +1,10 @@
 <div class="w-full bg-zonura-sand/20 py-12 md:py-16">
   <div class="max-w-[1600px] mx-auto px-4 md:px-8">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+    <div class="flex flex-col mb-8 gap-4">
       <div>
         <h2 class="font-serif text-3xl md:text-4xl text-zonura-navy mb-2">{{ section.settings.heading }}</h2>
         <p class="font-sans text-sm text-zonura-navy/60">{{ section.settings.subheading }}</p>
       </div>
-      {% assign collection = collections[section.settings.collection] %}
-      <a href="{{ collection.url | default: routes.all_products_collection_url }}" class="font-sans text-sm font-bold text-zonura-gold hover:text-zonura-navy transition-colors underline decoration-zonura-gold/30 underline-offset-4">VIEW ALL</a>
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -21,6 +19,11 @@
       {% else %}
         <p class="text-zonura-navy col-span-2 md:col-span-4 py-12 text-center bg-white/50 rounded-premium font-sans text-sm">No products found. Please select a collection in the Theme Editor.</p>
       {% endfor %}
+    </div>
+    
+    <div class="mt-12 flex justify-center">
+      {% assign collection = collections[section.settings.collection] %}
+      <a href="{{ collection.url | default: routes.all_products_collection_url }}" class="font-sans text-xs font-medium text-zonura-navy hover:text-zonura-gold transition-colors uppercase tracking-widest border-b border-zonura-navy/20 hover:border-zonura-gold pb-1">VIEW ALL</a>
     </div>
   </div>
 </div>
