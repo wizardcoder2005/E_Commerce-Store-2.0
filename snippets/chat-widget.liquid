@@ -1,0 +1,61 @@
+<!-- Floating Chat Widget -->
+<div id="chat-widget" class="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-4 transform transition-transform duration-300">
+  
+  <!-- Chat Window (Hidden by default) -->
+  <div id="chat-window" class="w-80 bg-white rounded-premium shadow-2xl border border-zonura-navy/10 overflow-hidden transform scale-95 opacity-0 pointer-events-none transition-all duration-300 origin-bottom-right">
+    <div class="bg-zonura-navy text-white p-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+        <span class="font-sans font-bold text-sm tracking-widest uppercase">Zonura Concierge</span>
+      </div>
+      <button id="chat-close" class="text-white/60 hover:text-white transition-colors focus:outline-none">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+    <div class="p-4 bg-zonura-sand/20 h-64 overflow-y-auto flex flex-col gap-3">
+      <!-- Chat bubbles -->
+      <div class="bg-white p-3 rounded-lg rounded-tl-none shadow-sm text-sm font-sans text-zonura-navy/80 self-start max-w-[85%]">
+        Hello! I'm your Zonura Concierge. How can I assist you with our premium collection today?
+      </div>
+    </div>
+    <div class="p-3 bg-white border-t border-zonura-navy/10 flex gap-2">
+      <input type="text" placeholder="Type a message..." class="flex-1 bg-zonura-sand/30 border border-transparent focus:border-zonura-action focus:bg-white rounded-full px-4 py-2 text-sm font-sans focus:outline-none transition-colors" />
+      <button class="bg-zonura-action text-white p-2 rounded-full hover:bg-zonura-navy transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Chat Toggle Button -->
+  <button id="chat-toggle" class="bg-zonura-action text-white p-4 rounded-full shadow-2xl hover:bg-zonura-navy transition-all focus:outline-none group hover:scale-105 active:scale-95">
+    <svg class="w-6 h-6 group-hover:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+    <svg class="w-6 h-6 hidden group-hover:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+  </button>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const chatToggle = document.getElementById('chat-toggle');
+    const chatClose = document.getElementById('chat-close');
+    const chatWindow = document.getElementById('chat-window');
+    
+    let isChatOpen = false;
+
+    const toggleChat = () => {
+      isChatOpen = !isChatOpen;
+      if (isChatOpen) {
+        chatWindow.classList.remove('scale-95', 'opacity-0', 'pointer-events-none');
+        chatWindow.classList.add('scale-100', 'opacity-100', 'pointer-events-auto');
+        chatToggle.querySelector('svg:first-child').classList.add('hidden');
+        chatToggle.querySelector('svg:last-child').classList.remove('hidden');
+        chatToggle.classList.replace('group-hover:hidden', 'hidden'); // A bit hacky, but CSS hover handles it well enough
+      } else {
+        chatWindow.classList.add('scale-95', 'opacity-0', 'pointer-events-none');
+        chatWindow.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto');
+      }
+    };
+
+    chatToggle.addEventListener('click', toggleChat);
+    chatClose.addEventListener('click', toggleChat);
+  });
+</script>

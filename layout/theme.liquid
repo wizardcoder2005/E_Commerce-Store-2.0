@@ -52,7 +52,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS (CDN for instant Shopify compatibility) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -62,14 +62,17 @@
           extend: {
             colors: {
               zonura: {
-                navy: "{{ settings.color_primary | default: '#0E1E2E' }}",
-                sand: "{{ settings.color_background | default: '#F4F1ED' }}",
-                gold: "{{ settings.color_accent | default: '#C9A637' }}",
+                navy: "{{ settings.color_primary | default: '#1A1A1A' }}",
+                sand: "{{ settings.color_background | default: '#FAFAFA' }}",
+                gold: "{{ settings.color_accent | default: '#D4AF37' }}",
+                action: "{{ settings.color_action | default: '#2C3E50' }}",
+                secondary: "{{ settings.color_secondary | default: '#7F8C8D' }}",
+                alert: "{{ settings.color_alert | default: '#9E2A2B' }}"
               }
             },
             fontFamily: {
-              sans: ["Montserrat", "sans-serif"],
-              serif: ["Cormorant Garamond", "serif"]
+              sans: ["Inter", "sans-serif"],
+              serif: ["Playfair Display", "serif"]
             },
             borderRadius: {
               premium: "14px"
@@ -128,6 +131,7 @@
     {% section 'header' %}
     
     <main id="MainContent" class="flex-grow focus:outline-none" role="main" tabindex="-1">
+      {% render 'breadcrumbs' %}
       {{ content_for_layout }}
     </main>
     
@@ -193,7 +197,11 @@
       </div>
     </div>
 
+    <!-- Chat Widget -->
+    {% render 'chat-widget' %}
+    
     <!-- Theme Interactive JS -->
+    <script src="{{ 'predictive-search.js' | asset_url }}" defer></script>
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
   </body>
 </html>

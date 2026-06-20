@@ -1,15 +1,15 @@
-<div class="group relative flex flex-col bg-white rounded-premium overflow-hidden border border-zonura-navy/5 hover:border-zonura-navy/10 transition-colors shadow-sm hover:shadow-xl h-full">
+<div class="group relative flex flex-col bg-white rounded-premium overflow-hidden transition-all duration-300 hover:-translate-y-1 h-full" style="box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
   
   <!-- Discount Badge -->
   {% if product.compare_at_price > product.price %}
     {% assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round %}
-    <div class="absolute top-3 left-3 z-10 bg-red-600 text-white font-sans text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wide">
+    <div class="absolute top-3 left-3 z-10 bg-zonura-alert text-white font-sans text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wide">
       {{ discount }}% OFF
     </div>
   {% endif %}
 
   <!-- Wishlist Icon -->
-  <button type="button" class="wishlist-btn absolute top-3 right-3 z-10 p-1.5 bg-white/80 backdrop-blur-sm rounded-full text-zonura-navy/60 hover:text-red-500 transition-colors focus:outline-none" data-product-id="{{ product.id }}">
+  <button type="button" class="wishlist-btn absolute top-3 right-3 z-10 p-1.5 bg-white/80 backdrop-blur-sm rounded-full text-zonura-secondary hover:text-zonura-alert transition-colors focus:outline-none" data-product-id="{{ product.id }}">
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
   </button>
 
@@ -41,7 +41,7 @@
     <!-- Hover/Mobile ATC -->
     {% form 'product', product, class: 'mt-auto' %}
       <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-      <button type="submit" name="add" class="w-full py-2.5 flex items-center justify-center rounded-[10px] bg-zonura-navy text-white font-sans text-xs font-bold tracking-wider hover:bg-zonura-gold hover:text-zonura-navy transition-all lg:opacity-0 lg:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 {% unless product.available %}opacity-50 cursor-not-allowed lg:opacity-50{% endunless %}" {% unless product.available %}disabled{% endunless %}>
+      <button type="submit" name="add" class="w-full py-2.5 flex items-center justify-center rounded-[10px] bg-zonura-action text-white font-sans text-xs font-bold tracking-wider hover:bg-zonura-navy transition-all lg:opacity-0 lg:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 {% unless product.available %}opacity-50 cursor-not-allowed lg:opacity-50{% endunless %}" {% unless product.available %}disabled{% endunless %}>
         {% if product.available %}ADD TO CART{% else %}SOLD OUT{% endif %}
       </button>
     {% endform %}

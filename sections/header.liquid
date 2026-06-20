@@ -80,14 +80,17 @@
     <div class="flex items-center gap-4 lg:gap-6 shrink-0">
       
       <!-- Search Form (Desktop) -->
-      <form action="{{ routes.search_url }}" method="get" class="relative hidden md:block">
-        <input type="text" name="q" placeholder="Search..." class="w-48 lg:w-64 bg-zonura-sand/20 border border-zonura-navy/10 rounded-full py-2 pl-4 pr-10 text-sm font-sans text-zonura-navy focus:outline-none focus:ring-1 focus:ring-zonura-gold transition-all" />
-        <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-zonura-navy/60 hover:text-zonura-gold transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-        </button>
-        <!-- Predictive Search Dropdown container -->
-        <div id="predictive-search-results" class="absolute top-full right-0 w-80 bg-white shadow-2xl border border-zonura-navy/10 rounded-premium mt-2 hidden z-50"></div>
-      </form>
+      <predictive-search class="relative hidden md:block">
+        <form action="{{ routes.search_url }}" method="get" class="relative">
+          <input type="hidden" name="options[prefix]" value="last">
+          <input type="search" name="q" placeholder="Search products, categories..." class="w-48 lg:w-64 bg-zonura-sand/50 border border-zonura-navy/10 rounded-full py-2 pl-4 pr-10 text-sm font-sans text-zonura-navy focus:outline-none focus:ring-1 focus:ring-zonura-action transition-all" role="combobox" aria-expanded="false" aria-owns="predictive-search-results" aria-controls="predictive-search-results" aria-haspopup="listbox" aria-autocomplete="list" autocorrect="off" autocomplete="off" autocapitalize="off" spellcheck="false" />
+          <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-zonura-navy/60 hover:text-zonura-action transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          </button>
+          <!-- Predictive Search Dropdown container -->
+          <div id="predictive-search-results" class="absolute top-full right-0 w-80 bg-white shadow-2xl border border-zonura-navy/10 rounded-premium mt-2 hidden z-50 overflow-hidden" tabindex="-1"></div>
+        </form>
+      </predictive-search>
 
       <!-- Search Icon (Mobile) -->
       <button class="md:hidden text-zonura-navy focus:outline-none" aria-label="Search">

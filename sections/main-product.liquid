@@ -15,11 +15,11 @@
       <!-- Main Scrollable Gallery -->
       <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 w-full hide-scrollbar">
         {% for image in product.images %}
-          <div class="relative w-full shrink-0 snap-center aspect-[4/5] bg-zonura-sand/20 rounded-[14px] overflow-hidden border border-zonura-navy/5">
-            <img src="{{ image.src | img_url: '1000x' }}" alt="{{ image.alt | escape | default: product.title | escape }}" class="w-full h-full object-cover" />
+          <div class="group relative w-full shrink-0 snap-center aspect-[4/5] bg-zonura-sand/20 rounded-[14px] overflow-hidden border border-zonura-secondary/10 cursor-zoom-in">
+            <img src="{{ image.src | img_url: '1000x' }}" alt="{{ image.alt | escape | default: product.title | escape }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-150 origin-center" />
           </div>
         {% else %}
-          <div class="relative w-full shrink-0 snap-center aspect-[4/5] bg-zonura-sand/20 rounded-[14px] overflow-hidden border border-zonura-navy/5 flex items-center justify-center">
+          <div class="relative w-full shrink-0 snap-center aspect-[4/5] bg-zonura-sand/20 rounded-[14px] overflow-hidden border border-zonura-secondary/10 flex items-center justify-center">
             {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover text-zonura-navy/10' }}
           </div>
         {% endfor %}
@@ -52,6 +52,28 @@
             <div class="font-sans text-sm text-zonura-navy/80 leading-relaxed font-light mb-8 prose max-w-none luxury-fade-up luxury-delay-100" {{ block.shopify_attributes }}>
               {{ product.description }}
             </div>
+          {% when 'specifications' %}
+            <div class="mt-8 luxury-fade-up luxury-delay-100" {{ block.shopify_attributes }}>
+              <h3 class="font-sans font-bold text-xs text-zonura-navy uppercase tracking-widest mb-4">Specifications</h3>
+              <div class="border border-zonura-secondary/20 rounded-md overflow-hidden font-sans text-sm shadow-sm">
+                <table class="w-full text-left border-collapse">
+                  <tbody>
+                    <tr class="border-b border-zonura-secondary/10 bg-zonura-sand/30">
+                      <th class="py-3 px-4 font-medium text-zonura-navy/70 w-1/3">Brand</th>
+                      <td class="py-3 px-4 text-zonura-navy">{{ product.vendor }}</td>
+                    </tr>
+                    <tr class="border-b border-zonura-secondary/10">
+                      <th class="py-3 px-4 font-medium text-zonura-navy/70 w-1/3">Product Type</th>
+                      <td class="py-3 px-4 text-zonura-navy">{{ product.type }}</td>
+                    </tr>
+                    <tr>
+                      <th class="py-3 px-4 font-medium text-zonura-navy/70 w-1/3">Availability</th>
+                      <td class="py-3 px-4 text-zonura-navy">{% if product.available %}In Stock{% else %}Out of Stock{% endif %}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
         {% endcase %}
       {% endfor %}
     </div>
@@ -74,13 +96,17 @@
 
         <div>
           {% if product.available %}
-            <span class="inline-flex items-center gap-1.5 text-sm font-medium text-zonura-navy/80 font-sans">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-              In Stock
-            </span>
             {% assign inventory = product.variants.first.inventory_quantity %}
             {% if inventory > 0 and inventory < 10 %}
-              <p class="font-sans text-xs font-medium text-zonura-navy/60 mt-1">Only {{ inventory }} left in stock — order soon!</p>
+              <span class="inline-flex items-center gap-1.5 text-sm font-bold text-zonura-alert font-sans mb-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                Low Stock — Only {{ inventory }} left!
+              </span>
+            {% else %}
+              <span class="inline-flex items-center gap-1.5 text-sm font-medium text-zonura-navy/80 font-sans mb-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                In Stock - Ships Tomorrow
+              </span>
             {% endif %}
           {% else %}
             <span class="inline-flex items-center gap-1.5 text-sm font-medium text-zonura-navy/60 font-sans">
@@ -108,9 +134,18 @@
         {% form 'product', product, class: 'flex flex-col gap-3', id: 'main-atc-form' %}
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
           
-          <button type="submit" name="add" id="main-atc-button" class="w-full py-4 flex items-center justify-center gap-2 rounded-full bg-zonura-navy hover:bg-zonura-gold hover:text-zonura-navy text-white font-medium font-sans text-sm tracking-widest transition-colors {% unless product.available %}opacity-50 cursor-not-allowed{% endunless %}" {% unless product.available %}disabled{% endunless %}>
+          <button type="submit" name="add" id="main-atc-button" class="w-full py-4 flex items-center justify-center gap-2 rounded-full bg-zonura-action hover:bg-zonura-navy text-white font-medium font-sans text-sm tracking-widest transition-colors {% unless product.available %}opacity-50 cursor-not-allowed{% endunless %}" {% unless product.available %}disabled{% endunless %}>
             {% if product.available %}Add to Cart{% else %}Out of Stock{% endif %}
           </button>
+          
+          <div class="flex items-center justify-between mt-2 px-1">
+            <a href="/policies/shipping-policy" class="flex items-center gap-1 text-xs font-sans text-zonura-secondary hover:text-zonura-navy transition-colors underline underline-offset-4">
+              Shipping Info
+            </a>
+            <a href="/policies/refund-policy" class="flex items-center gap-1 text-xs font-sans text-zonura-secondary hover:text-zonura-navy transition-colors underline underline-offset-4">
+              Return Policy
+            </a>
+          </div>
           
           {% if product.available %}
             <div class="shopify-payment-button-wrapper mt-1">
@@ -127,6 +162,20 @@
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
           Add to Wishlist
         </button>
+
+        <div class="flex flex-col items-center justify-center gap-2 mt-6 pt-6 border-t border-zonura-secondary/20">
+          <div class="flex items-center gap-2 text-zonura-secondary">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span class="font-sans text-xs uppercase tracking-widest font-bold">Secure SSL Checkout</span>
+          </div>
+          <div class="flex items-center gap-2 mt-2 opacity-60 grayscale hover:grayscale-0 transition-all">
+            {{ 'visa' | payment_type_svg_tag: class: 'w-10 h-6' }}
+            {{ 'master' | payment_type_svg_tag: class: 'w-10 h-6' }}
+            {{ 'american_express' | payment_type_svg_tag: class: 'w-10 h-6' }}
+            {{ 'paypal' | payment_type_svg_tag: class: 'w-10 h-6' }}
+            {{ 'apple_pay' | payment_type_svg_tag: class: 'w-10 h-6' }}
+          </div>
+        </div>
 
       </div>
     </div>
@@ -179,6 +228,11 @@
     {
       "type": "description",
       "name": "Description",
+      "limit": 1
+    },
+    {
+      "type": "specifications",
+      "name": "Specifications Table",
       "limit": 1
     }
   ],

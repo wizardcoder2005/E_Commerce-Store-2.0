@@ -1,0 +1,46 @@
+{%- if predictive_search.performed -%}
+  <div id="predictive-search-results" class="bg-white p-4">
+    {%- if predictive_search.resources.products.size > 0 -%}
+      <h3 class="font-sans text-xs font-bold text-zonura-navy/50 uppercase tracking-widest mb-3">Products</h3>
+      <ul class="flex flex-col gap-3" role="listbox" aria-labelledby="predictive-search-products">
+        {%- for product in predictive_search.resources.products -%}
+          <li role="option" aria-selected="false">
+            <a href="{{ product.url }}" class="flex items-center gap-3 hover:bg-zonura-sand/50 p-2 rounded-md transition-colors">
+              {%- if product.featured_media != blank -%}
+                <img class="w-12 h-16 object-cover rounded-sm"
+                  src="{{ product.featured_media | img_url: '100x' }}"
+                  alt="{{ product.featured_media.alt | escape }}"
+                  width="50"
+                  height="65"
+                >
+              {%- endif -%}
+              <div class="flex flex-col">
+                <span class="font-sans text-sm font-semibold text-zonura-navy">{{ product.title }}</span>
+                <span class="font-serif text-sm font-bold text-zonura-navy">{{ product.price | money }}</span>
+              </div>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if predictive_search.resources.queries.size > 0 -%}
+      <h3 class="font-sans text-xs font-bold text-zonura-navy/50 uppercase tracking-widest mt-4 mb-3">Suggestions</h3>
+      <ul class="flex flex-col gap-2" role="listbox">
+        {%- for query in predictive_search.resources.queries -%}
+          <li role="option" aria-selected="false">
+            <a href="{{ query.url }}" class="font-sans text-sm text-zonura-navy hover:text-zonura-gold transition-colors">{{ query.styled_text }}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if predictive_search.resources.products.size == 0 and predictive_search.resources.queries.size == 0 -%}
+      <p class="font-sans text-sm text-zonura-navy/60">No results found for “{{ predictive_search.terms }}”.</p>
+    {%- else -%}
+      <button class="w-full mt-4 py-2 font-sans text-xs font-bold bg-zonura-sand text-zonura-navy rounded hover:bg-zonura-gold transition-colors uppercase tracking-widest" tabindex="-1">
+        Search for “{{ predictive_search.terms }}”
+      </button>
+    {%- endif -%}
+  </div>
+{%- endif -%}

@@ -24,20 +24,38 @@
       {
         "type": "color",
         "id": "color_primary",
-        "label": "Primary Color (Navy/Charcoal)",
+        "label": "Primary Text (Charcoal)",
         "default": "#1A1A1A"
       },
       {
         "type": "color",
         "id": "color_background",
-        "label": "Background Color (Alabaster)",
+        "label": "Primary Background (Pearl White)",
         "default": "#FAFAFA"
       },
       {
         "type": "color",
+        "id": "color_action",
+        "label": "Primary Action (Midnight Blue)",
+        "default": "#2C3E50"
+      },
+      {
+        "type": "color",
         "id": "color_accent",
-        "label": "Accent Color (Taupe)",
-        "default": "#BBAF9E"
+        "label": "Premium Accent (Champagne Gold)",
+        "default": "#D4AF37"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Secondary Text/Borders (Slate Gray)",
+        "default": "#7F8C8D"
+      },
+      {
+        "type": "color",
+        "id": "color_alert",
+        "label": "Alert/Urgency (Muted Crimson)",
+        "default": "#9E2A2B"
       }
     ]
   },
